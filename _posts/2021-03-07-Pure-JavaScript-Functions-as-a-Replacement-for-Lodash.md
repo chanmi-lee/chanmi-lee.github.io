@@ -54,7 +54,7 @@ _.find(users, function (o) { return o.age < 40; })
 
 위의 간단한 예제 코드를 통해, 네이티브 자바스크립트와 Lodash 각각의 성능을 살펴보겠습니다.
 
-![queue](https://miro.medium.com/max/1400/1*aw5pv3HKxsHsV1jh434UYg.png){: width="50%" height="50%"}*find의 성능이 _.find 보다 높은 결과를 보였다*
+![queue](https://miro.medium.com/max/1400/1*aw5pv3HKxsHsV1jh434UYg.png)*find의 성능이 _.find 보다 높은 결과를 보였다*{: width="50%" height="50%"}
 
 하지만, 이 통계만 보고 순수 자바스크립트의 기능이 항상 Lodash의 것보다 성능이 좋다는 결론을 내릴 순 없습니다.
 다만, 네이티브 함수인 [find](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find) 이 lodash의 [find](https://lodash.com/docs/4.17.15#find) 보다 더 간결하고 읽기 쉽다는 장점이 있음은 분명해보입니다.
