@@ -54,7 +54,7 @@ _.find(users, function (o) { return o.age < 40; })
 
 위의 간단한 예제 코드를 통해, 네이티브 자바스크립트와 Lodash 각각의 성능을 살펴보겠습니다.
 
-![queue](https://miro.medium.com/max/1400/1*aw5pv3HKxsHsV1jh434UYg.png "find의 성능이 _.find 보다 높은 결과를 보였다"){: width="50%" height="50%"}
+![queue](https://miro.medium.com/max/1400/1*aw5pv3HKxsHsV1jh434UYg.png){: width="50%" height="50%"}*find의 성능이 _.find 보다 높은 결과를 보였다*
 
 하지만, 이 통계만 보고 순수 자바스크립트의 기능이 항상 Lodash의 것보다 성능이 좋다는 결론을 내릴 순 없습니다.
 다만, 네이티브 함수인 [find](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find) 이 lodash의 [find](https://lodash.com/docs/4.17.15#find) 보다 더 간결하고 읽기 쉽다는 장점이 있음은 분명해보입니다.
@@ -72,7 +72,7 @@ _.filter(numbers, num => num % 3 === 0)
 numbers.filter(num => num % 3 === 0)
 ```
 
-![queue](https://miro.medium.com/max/1400/1*lstVPT2qm3OesKxOm3OoGg.png "_.filter vs array.filter"){: width="50%" height="50%"}
+![queue](https://miro.medium.com/max/1400/1*lstVPT2qm3OesKxOm3OoGg.png){: width="50%" height="50%"}*_.filter vs array.filter*
 
 이번에도 [`Array.prototype.filter`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter)가 동일 연산을 처리하는데 좀 더 빠르다는 결과를 얻을 수 있습니다.
 
@@ -99,7 +99,7 @@ _.forEach({ 'a': 1, 'b': 2 }, (value, key) => {
 });
 ```
 
-![queue](https://miro.medium.com/max/1400/1*sqlnG7flP2igrYUnt7YSzA.png "_.each vs forEach vs map"){: width="50%" height="50%"}
+![queue](https://miro.medium.com/max/1400/1*sqlnG7flP2igrYUnt7YSzA.png){: width="50%" height="50%"}*_.each vs forEach vs map*
 
 `_.each`는 브라우저 별로 구현을 달리 하기 때문에 네이티브 함수보다 훨씬 빠른 결과를 얻을 수 있습니다.
 
@@ -119,7 +119,7 @@ _.every(elements, el => el.length == 3)
 elements.every(el => el.length == 3) //true
 ```
 
-![queue](https://miro.medium.com/max/1400/1*_CJMbz8wzHiv6R2SP7h9Gw.png "_.every vs array.every"){: width="50%" height="50%"}
+![queue](https://miro.medium.com/max/1400/1*_CJMbz8wzHiv6R2SP7h9Gw.png){: width="50%" height="50%"}*_.every vs array.every*
 
 이번에도 [Array.prototype.every](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every) 가 `_.every`보다 훨씬 빠르다는 결과를 얻었습니다. 
 
@@ -134,7 +134,7 @@ _.some(elements, el => el.startsWith('c'))
 elements.some(el => el.startsWith('c'))
 ```
 
-![queue](https://miro.medium.com/max/1400/1*EBznqoWTqNjrARQE_yJpTw.png "array.some vs _.some"){: width="50%" height="50%"}
+![queue](https://miro.medium.com/max/1400/1*EBznqoWTqNjrARQE_yJpTw.png){: width="50%" height="50%"}*array.some vs _.some*
 
 [Array.prototype.some](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/some) 의 결과가 우세함을 알 수 있습니다.
 
@@ -148,7 +148,7 @@ const primes = [2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83
 _.includes(primes, 47)
 primes.includes(79)
 ```
-![queue](https://miro.medium.com/max/1400/1*WW2NTx8Ka4PKul6gPPvOuQ.png "array.includes vs _.includes"){: width="50%" height="50%"}
+![queue](https://miro.medium.com/max/1400/1*WW2NTx8Ka4PKul6gPPvOuQ.png){: width="50%" height="50%"}*array.includes vs _.includes*
 
 #### uniq
 
@@ -163,7 +163,7 @@ _.uniq(elements)
 [...new Set(elements)]
 ```
 
-![queue](https://miro.medium.com/max/1400/1*GOx7k9e6DFast8jPSmPKpQ.png "_.uniq vs Set"){: width="50%" height="50%"}
+![queue](https://miro.medium.com/max/1400/1*GOx7k9e6DFast8jPSmPKpQ.png){: width="50%" height="50%"}*_.uniq vs Set*
 
 `_.uniq`의 성능이 조금 더 우세함을 확인할 수 있습니다.
 
