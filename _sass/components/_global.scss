@@ -17,6 +17,11 @@ img {
   margin-left: auto;
   margin-right: auto;
 }
+// Image Caption
+img + em {
+  display: block;
+  text-align: center;
+}
 
 // Tables
 table,
