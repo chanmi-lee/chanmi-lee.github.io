@@ -7,7 +7,7 @@ share: true
 comments: true
 ---
 
-![queue]({{ site.url }}/assets/img/posts/learning-react.jpeg){: width="50%" height="50%"}
+![queue]({{ site.url }}/assets/img/posts/learning-react.jpeg){: width="30%" height="30%"}
 
 ### Learning React 리뷰
 
