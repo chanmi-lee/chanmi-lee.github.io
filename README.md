@@ -1,12 +1,3 @@
-# Chanmi Lee
-
-```
-- currently working at Lunit. Previously worked at Gmarket (eBay Korea) as software engineer.
--
-```
-
----
-
 ## License
 
 The theme is available as open source under the terms of the [MIT License](https://github.com/alshedivat/al-folio/blob/main/LICENSE).
