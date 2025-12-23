@@ -36,9 +36,3 @@ group :other_plugins do
     # gem 'unicode_utils' -- should be already installed by jekyll
     # gem 'webrick' -- should be already installed by jekyll
 end
-
-# Explicitly update activesupport to avoid conflict with i18n
-gem 'activesupport', '>= 5.0', '< 7.0'
-
-# Downgrade listen to be compatible with jekyll-watch
-gem 'listen', '3.2.1'
