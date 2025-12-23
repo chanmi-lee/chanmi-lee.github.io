@@ -17,9 +17,9 @@ toc:
 
 빠르게 변하는 기술의 영향으로, PC와 모바일, 태블릿 등 유저가 사용하는 기기의 종류와 IE, Chrome, Firefox, Safari 등 기기에서 사용하는 웹 브라우저도 다양해지고 있습니다.
 
-`W3C`의 정의에 따르면, **웹 표준**(`Web Standard`)은 *접근성, 사생활 보호, 보안, 국제화의 측면* 에서 고려해야 한다고 합니다. 이 중 접근성을 흔히 **웹 접근성**(`Web Accessibility or A11y`)이라 하며, 신체적 차이나 장애 여부와 상관없이 누구나 원활하게 웹 페이지를 이용할 수 있어야 함을 의미합니다. 키보드만으로도 이용이 가능하도록 하는 `Skip navigation`, 텍스트가 아닌 콘텐츠 인식을 위한 `대체 텍스트 제공(alt)` 등의 기능을 대표적인 예로 들 수 있습니다.
+`W3C`의 정의에 따르면, **웹 표준**(`Web Standard`)은 _접근성, 사생활 보호, 보안, 국제화의 측면_ 에서 고려해야 한다고 합니다. 이 중 접근성을 흔히 **웹 접근성**(`Web Accessibility or A11y`)이라 하며, 신체적 차이나 장애 여부와 상관없이 누구나 원활하게 웹 페이지를 이용할 수 있어야 함을 의미합니다. 키보드만으로도 이용이 가능하도록 하는 `Skip navigation`, 텍스트가 아닌 콘텐츠 인식을 위한 `대체 텍스트 제공(alt)` 등의 기능을 대표적인 예로 들 수 있습니다.
 
-웹 사이트나 웹 페이지가 **웹 표준**(`Web Standard`)을 준수한다는 것은, 일반적으로 *올바른 HTML, CSS, JavaScript를 사이트나 페이지가 가지고 있다* 는 것을 뜻합니다.
+웹 사이트나 웹 페이지가 **웹 표준**(`Web Standard`)을 준수한다는 것은, 일반적으로 _올바른 HTML, CSS, JavaScript를 사이트나 페이지가 가지고 있다_ 는 것을 뜻합니다.
 
 여기서의 **올바른** 이라는 말은, 달리 해석하면 `웹 표준을 따르는-` 이라는 말로 해석이 가능하며, HTML과 CSS의 표준을 정하는 `W3C`와 JavaScript의 표준을 정하는 `ECMA International`의 공식 문서를 필수 레퍼런스로 참조하여야 함을 뜻한다- 라고 이해해보았습니다.
 
@@ -34,7 +34,7 @@ toc:
 ## Cross Browsing, 어디까지 맞춰야 할까?
 
 > Cross Browsing의 목표는 완벽한 호환성에 두는 것이 아니라, 이종 웹브라우저에서 사용되는 비호환 및 비표준 구현 방식과 기법들을 가능한 표준안에서 수용할 수 있는 방법을 찾는 것이다.
-<Cross Browsing 가이드 - 한국소프트웨어진흥원 공개SW지원센터>
+> <Cross Browsing 가이드 - 한국소프트웨어진흥원 공개SW지원센터>
 
 각 브라우저마다 지원하는 함수, 메소드, 그리고 기능에는 차이가 있습니다. ES2015에서는 이전과 달리 많은 문법과 기능 (ex- [Class](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes), [Module](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules), [Template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Text_formatting#Multi-line_template_literals), [Proxy](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Meta_programming#Proxies), ...) 이 추가되었습니다. 그러나 일부 브라우저에서는 해당 기능을 지원하지 않고, 모든 사용자들이 항상 최신버전의 브라우저를 사용한다는 보장 또한 없습니다.
 
@@ -52,14 +52,13 @@ toc:
 
 QA 혹은 갑작스러운 CS 건이 들어올 때마다 항상 우선으로 **문제가 되는 사용자의 환경** (`ex- 계정, 기기, 브라우저 정보 등`)을 요청하는데, 이는 조금 더 빨리 문제를 해결할 수 있는 중요한 단서가 됩니다.
 
-사소해보이나 가장 빈번하게 나오는 오류 중 하나는 *특정 브라우저* <del>(라고 쓰고 주로 IE라고 읽는)</del> *에서는 지원되지 않는 함수* 임을 알려주는 경고 메시지입니다.
+사소해보이나 가장 빈번하게 나오는 오류 중 하나는 _특정 브라우저_ <del>(라고 쓰고 주로 IE라고 읽는)</del> _에서는 지원되지 않는 함수_ 임을 알려주는 경고 메시지입니다.
 
 {% include figure.liquid loading="eager" path="/assets/img/posts/does-not-support-includes.jpg" class="img-fluid rounded z-depth-1" %}
 
 IE에서는 Array.prototype.includes (or String.prototype.includes)를 지원하지 않기 때문에 보통 다음의 두 가지 방법으로 해결할 수 있습니다.
 
 - indexOf 사용
-
 
 {% highlight javascript linenos%}
 const pets = ['cat', 'dog', 'goose', 'lion']
@@ -72,15 +71,16 @@ console.log(pets.indexOf('cat') > -1)
 
 {% highlight javascript linenos%}
 if (!String.prototype.includes) {
-  String.prototype.includes = function(search, start) {
-    'use strict';
+String.prototype.includes = function(search, start) {
+'use strict';
 
     if (search instanceof RegExp) {
       throw TypeError('first argument must not be a RegExp');
     }
     if (start === undefined) { start = 0; }
     return this.indexOf(search, start) !== -1;
-  };
+
+};
 }
 {% endhighlight %}
 
@@ -88,11 +88,9 @@ if (!String.prototype.includes) {
 
 {% include figure.liquid loading="eager" path="/assets/img/posts/ie-does-not-support-method.jpg" class="img-fluid rounded z-depth-1" %}
 
-
 또한 구글링 외에도, [MDN](https://developer.mozilla.org/)이나 [Can I use](https://caniuse.com/)에서 확인을 원하는 함수를 키워드로 검색해보면 한 눈에 각 브라우저 버전별 호환성을 확인할 수 있습니다.
 
 {% include figure.liquid loading="eager" path="/assets/img/posts/can-i-use-includes.jpg" class="img-fluid rounded z-depth-1" %}
-
 
 ---
 

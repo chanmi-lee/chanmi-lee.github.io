@@ -12,13 +12,14 @@ toc:
 
 Refs는 `render` 메소드를 통해 생성된 DOM node 혹은 React 요소에 접근하는 방법입니다.
 
-React의 데이터 흐름에서, `props`는 부모 컴포넌트와 자식 컴포넌트가 소통하는 유일한 방법입니다. 자식 컴포넌트에 영향을 주기 위해, 새로운  `props`를 통해 이를 re-render 할 수 있습니다.
+React의 데이터 흐름에서, `props`는 부모 컴포넌트와 자식 컴포넌트가 소통하는 유일한 방법입니다. 자식 컴포넌트에 영향을 주기 위해, 새로운 `props`를 통해 이를 re-render 할 수 있습니다.
 
 예외적으로, 이러한 일반적인 데이터 흐름과 달리 자식 컴포넌트에 직접적인 접근을 해야하는 몇 가지 사례가 있습니다.
+
 - input / textarea 등에 포커스를 줄 때
 - 특정 DOM과 관련된 정보 (크기, 위치 등)를 가져오거나 설정을 해야할 때
 - DOM과 관련된 외부 라이브러리를 사용할 때
-등이 있습니다.
+  등이 있습니다.
 
 ---
 
@@ -28,13 +29,13 @@ Refs는 `React.createRef()`를 통해 생성되며, `ref` 속성을 통해 React
 
 {% highlight javascript linenos%}
 class MyComponent extends React.Component {
-  constructor(props) {
-    super(props)
-    this.myRef = React.createRef()
-  }
-  render() {
-    return <div ref={this.myRef} />
-  }
+constructor(props) {
+super(props)
+this.myRef = React.createRef()
+}
+render() {
+return <div ref={this.myRef} />
+}
 }
 {% endhighlight %}
 
@@ -56,40 +57,39 @@ ref의 값은 노드 타입에 따라 달라집니다.
 
 {% highlight javascript linenos%}
 class CustomTextInput extends React.Component {
-  constructor(props) {
-    super(props)
-    // create a ref to store the textInput DOM element
-    this.textInput = React.createRef()
-    this.focusTextInput = this.focusTextInput.bind(this)
-  }
+constructor(props) {
+super(props)
+// create a ref to store the textInput DOM element
+this.textInput = React.createRef()
+this.focusTextInput = this.focusTextInput.bind(this)
+}
 
-  focusTextInput() {
-    // Explicitly focus the text input using the raw DOM API
-    // Note: we're accessing "current" to get the DOM node
-    this.textInput.current.focus()
-  }
+focusTextInput() {
+// Explicitly focus the text input using the raw DOM API
+// Note: we're accessing "current" to get the DOM node
+this.textInput.current.focus()
+}
 
-  render() {
-    // tell React that we want to associate the <input> ref
-    // with the `textInput` that we created in the constructor
-    return (
-      <div>
-        <input
+render() {
+// tell React that we want to associate the <input> ref
+// with the `textInput` that we created in the constructor
+return (
+<div>
+<input
           type="text"
           ref={this.textInput} />
-        <input
+<input
           type="button"
           value="Focus the text input"
           onClick={this.focusTextInput}
         />
-      </div>
-    )
-  }
+</div>
+)
+}
 }
 {% endhighlight %}
 
 CustomTextInput 컴포넌트가 mount 될 때, 리액트는 해당 DOM element에 `current` 속성을 부여하며, unmount 될 때 이를 `null`로 되돌려줍니다. ref 업데이트는 `componentDidMount` 혹은 `componentDidUpdate` lifecycle 메소드 전에 발생합니다.
-
 
 > Class component에 ref 추가하기
 
@@ -97,20 +97,20 @@ CustomTextInput 컴포넌트가 mount 될 때, 리액트는 해당 DOM element�
 
 {% highlight javascript linenos%}
 class AutoFocusTextInput extends React.Component {
-  constructor(props) {
-    super(props)
-    this.textInput = React.createRef()
-  }
+constructor(props) {
+super(props)
+this.textInput = React.createRef()
+}
 
-  componentDidMount() {
-    this.textInput.current.focusTextInput()
-  }
+componentDidMount() {
+this.textInput.current.focusTextInput()
+}
 
-  render() {
-    return (
-      <CustomTextInput ref={this.textInput} />
-    )
-  }
+render() {
+return (
+<CustomTextInput ref={this.textInput} />
+)
+}
 }
 {% endhighlight %}
 
@@ -120,20 +120,20 @@ class AutoFocusTextInput extends React.Component {
 
 {% highlight javascript linenos%}
 function MyFunctionComponent() {
-  return <input />
+return <input />
 }
 
 class Parent extends React.Component {
-  constructor(props) {
-    super(props)
-    this.textInput = React.createRef()
-  }
-  render() {
-    // This will *not* work!
-    return (
-      <MyFunctionComponent ref={this.textInput} />
-    )
-  }
+constructor(props) {
+super(props)
+this.textInput = React.createRef()
+}
+render() {
+// This will _not_ work!
+return (
+<MyFunctionComponent ref={this.textInput} />
+)
+}
 }
 {% endhighlight %}
 
@@ -143,25 +143,25 @@ class Parent extends React.Component {
 
 {% highlight javascript linenos%}
 function CustomTextInput(props) {
-  // textInput must be declared here so the ref can refer to it
-  const textInput = useRef(null)
+// textInput must be declared here so the ref can refer to it
+const textInput = useRef(null)
 
-  function handleClick() {
-    textInput.current.focus()
-  }
+function handleClick() {
+textInput.current.focus()
+}
 
-  return (
-    <div>
-      <input
+return (
+<div>
+<input
         type="text"
         ref={textInput} />
-      <input
+<input
         type="button"
         value="Focus the text input"
         onClick={handleClick}
       />
-    </div>
-  )
+</div>
+)
 }
 {% endhighlight %}
 

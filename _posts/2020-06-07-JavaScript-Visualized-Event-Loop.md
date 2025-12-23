@@ -12,7 +12,7 @@ toc:
 
 ### 이벤트 루프 이해하기
 
-`이벤트 루프`! 
+`이벤트 루프`!
 모든 JavaScript 개발자들이 알아야 하는 개념 중 하나지만, 처음에는 다소 그 개념을 이해하기가 혼란스러울 수 있습니다.
 
 저는 시각적 학습자로서 이벤트 루프를 시각적인 방법을 통해 이해하고자 합니다.
@@ -43,7 +43,6 @@ Web API에는 `DOM API, setTimeout, HTTP requests` 등이 포함됩니다.
 
 {% include figure.liquid loading="eager" path="/assets/img/posts/event-loop-call-stack.gif" class="img-fluid rounded z-depth-1" %}
 
-
 위에서 `respond` 함수는 `setTimeout` 함수를 반환합니다.
 `setTimeout`은 Web API에 의해 제공되며, 메인 스레드를 차단하지 않고 작업을 지연시킬 수 있습니다.
 
@@ -68,12 +67,12 @@ Web API에서, 타이머는 전달된 두 번째 인수 값인 1000ms 동안 실
 이 경우에는 다른 함수는 호출되지 않았는데, 이는 콜백 함수가 이벤트 루프에 의해 큐의 첫 번째 항목으로 추가되기 전까지 호출 스택이 비어있음을 의미합니다.
 
 > MDN의 이벤트 루프 관련 내용을 보면, 왜 이벤트 **'루프'** 라는 이름이 붙었는지를 간단한 코드와 함께 설명하고 있습니다.
-> `waitForMessage` 메소드는 현재 실행 중인 작업이 없을 때 (즉, 호출 스택이 비어있을 때), 다음 작업이 태스크 큐에 추가될 때까지 대기하는 역할을 합니다. 
+> `waitForMessage` 메소드는 현재 실행 중인 작업이 없을 때 (즉, 호출 스택이 비어있을 때), 다음 작업이 태스크 큐에 추가될 때까지 대기하는 역할을 합니다.
 
 {% highlight javascript linenos%}
 while (queue.waitForMessage()) {
-   queue.processNextMessage()
- }
+queue.processNextMessage()
+}
 {% endhighlight %}
 
 ---

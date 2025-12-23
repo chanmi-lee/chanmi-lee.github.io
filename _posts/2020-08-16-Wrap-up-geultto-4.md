@@ -18,14 +18,14 @@ toc:
 **연차에 걸맞는 실력을 갖췄는가?** 라는 질문과 함께 시작한 나의 2020년 상반기는 (+1.5달)
 회사 업무 외에도 글또 4기 활동의 구체적인 노력들을 통해 조금 다른 방면에서 채울 수 있는 의미있는 시간이었다.
 
-* [글또 4기로 블로그 되살리기](https://chanmi-lee.github.io/articles/2020-03/why-geultto)
-* [웹 표준과 크로스 브라우징 이슈](https://chanmi-lee.github.io/articles/2020-03/web-standard-and-cross-browsing-issue)
-* [Refs in React](https://chanmi-lee.github.io/articles/2020-04/refs-in-react)
-* [HOC in React](https://chanmi-lee.github.io/articles/2020-04/what-is-hoc-and-how-to-use-it-in-react)
-* [JavaScript Function](https://chanmi-lee.github.io/articles/2020-05/JavaScript-Function)
-* [[번역] 자바스크립트 이벤트 루프](https://chanmi-lee.github.io/articles/2020-06/JavaScript-Visualized-Event-Loop)
-* [2020년 상반기 회고](https://chanmi-lee.github.io/articles/2020-07/the-first-half-of-2020)
-* [Hooks 살펴보기](https://chanmi-lee.github.io/articles/2020-07/Hooks-of-React)
+- [글또 4기로 블로그 되살리기](https://chanmi-lee.github.io/articles/2020-03/why-geultto)
+- [웹 표준과 크로스 브라우징 이슈](https://chanmi-lee.github.io/articles/2020-03/web-standard-and-cross-browsing-issue)
+- [Refs in React](https://chanmi-lee.github.io/articles/2020-04/refs-in-react)
+- [HOC in React](https://chanmi-lee.github.io/articles/2020-04/what-is-hoc-and-how-to-use-it-in-react)
+- [JavaScript Function](https://chanmi-lee.github.io/articles/2020-05/JavaScript-Function)
+- [[번역] 자바스크립트 이벤트 루프](https://chanmi-lee.github.io/articles/2020-06/JavaScript-Visualized-Event-Loop)
+- [2020년 상반기 회고](https://chanmi-lee.github.io/articles/2020-07/the-first-half-of-2020)
+- [Hooks 살펴보기](https://chanmi-lee.github.io/articles/2020-07/Hooks-of-React)
 
 지난 반년 동안 주로 React와 JavaScript를 주제로 글을 작성하였다.
 회사에서 React와 Angular를 함께 쓰다보니 처음엔 둘 다 익숙하지 않아 각각의 개념을 명확하게 알지 못했다.
@@ -48,4 +48,3 @@ toc:
 
 다음에 또 기회가 된다면 이번 활동의 아쉬운 점들을 보완할 수 있는 구체적인 다짐글로부터 시작해야겠다 :)
 수고해주신 성윤님과 운영진 분들께도 감사드립니다!
-

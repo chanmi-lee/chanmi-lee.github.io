@@ -24,9 +24,9 @@ toc:
 ### 📌 클로저 예제
 
 {% highlight javascript linenos%}
-var closure = (function getCounter() {  // 함수를 정의하고 바로 호출합니다.
-    var counter = 0;
-    return function() { return counter++; };
+var closure = (function getCounter() { // 함수를 정의하고 바로 호출합니다.
+var counter = 0;
+return function() { return counter++; };
 }());
 {% endhighlight %}
 
@@ -40,19 +40,19 @@ var closure = (function getCounter() {  // 함수를 정의하고 바로 호출�
 
 {% highlight javascript linenos%}
 function counter() {
-    var n = 0;
-    return {
-        count: function() { return n++; },
-        reset: function() { n = 0; }
-    };
+var n = 0;
+return {
+count: function() { return n++; },
+reset: function() { n = 0; }
+};
 }
 
-var c = counter(), d = counter();   // 두 개의 카운터를 생성합니다.
-c.count();      // => 0
-d.count();      // => 0 : c와 d는 서로 독립적입니다.
-c.reset();      // reset() 메서드와 count() 메서드는 상태를 공유합니다. 즉 같은 유효범위 체인을 공유합니다.
-c.count();      // => 0 : c를 reset하였기 때문에 0을 반환합니다.
-d.count();      // => 1 : d는 reset되지 않았기 때문에 1을 반환합니다.
+var c = counter(), d = counter(); // 두 개의 카운터를 생성합니다.
+c.count(); // => 0
+d.count(); // => 0 : c와 d는 서로 독립적입니다.
+c.reset(); // reset() 메서드와 count() 메서드는 상태를 공유합니다. 즉 같은 유효범위 체인을 공유합니다.
+c.count(); // => 0 : c를 reset하였기 때문에 0을 반환합니다.
+d.count(); // => 1 : d는 reset되지 않았기 때문에 1을 반환합니다.
 {% endhighlight %}
 
 위의 예제에서 함수 `counter`를 호출할 때마다 새로운 유효범위 체인과 새로운 내부 변수가 생성됩니다.
@@ -66,12 +66,12 @@ d.count();      // => 1 : d는 reset되지 않았기 때문에 1을 반환합니
 
 {% highlight javascript linenos%}
 function count() {
-    var i;
-    for (i = 1; i <= 10; i++) {
-        setTimeout(function timer() {
-            console.log(i);
-        }, i * 100);
-    }
+var i;
+for (i = 1; i <= 10; i++) {
+setTimeout(function timer() {
+console.log(i);
+}, i \* 100);
+}
 }
 count();
 {% endhighlight %}
@@ -83,14 +83,14 @@ count();
 
 {% highlight javascript linenos%}
 function count() {
-    var i;
-    for (i = 1; i <= 10; i++) {
-        (function(innerCounting) {
-            setTimeout(function timer() {
-                console.log(innerCounting);
-            }, i * 100);
-        })(i);
-    }
+var i;
+for (i = 1; i <= 10; i++) {
+(function(innerCounting) {
+setTimeout(function timer() {
+console.log(innerCounting);
+}, i \* 100);
+})(i);
+}
 }
 count();
 {% endhighlight %}
@@ -105,12 +105,12 @@ count();
 
 {% highlight javascript linenos%}
 function count() {
-    'use strict';
-    for (let i = 1; i <= 10; i++) {
-        setTimeout(function timer() {
-            console.log(i);
-        }, i * 100);
-    }
+'use strict';
+for (let i = 1; i <= 10; i++) {
+setTimeout(function timer() {
+console.log(i);
+}, i \* 100);
+}
 }
 count();
 {% endhighlight %}

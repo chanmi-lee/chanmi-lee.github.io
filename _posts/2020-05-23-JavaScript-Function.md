@@ -12,7 +12,7 @@ toc:
 자바스크립트에서 함수는 Arrays 등의 다른 일반 객체처럼 값으로 취급되며 속성 및 메서드를 가질 수 있어 일급(first-class) 객체이다.
 다른 객체와 달리 함수는 호출될 수 있으며, 기본값(`this` or `undefined`) 이외의 값을 반환하는 경우 `return` 문으로 값을 지정하여 반환한다.
 
-### 함수 정의 
+### 함수 정의
 
 자바스크립트에서 함수를 생성하는 방법은 3가지가 있다.
 각 방식에 따른 결과는 모두 동일한 함수이지만, 각 방식에 따라 함수 동작에 미묘한 차이가 있다.
@@ -24,12 +24,12 @@ toc:
 {% highlight javascript linenos%}
 // 1. 함수 선언문
 function add(x, y) {
-    return x + y;
+return x + y;
 }
 
 // 2. 함수 표현식
 var add = function (x, y) {
-    return x + y;
+return x + y;
 }
 
 // 3. Function() 생성자 함수
@@ -68,29 +68,29 @@ new Function (arg1, arg2, ... argN, functionBody)
 {% highlight javascript linenos%}
 // 함수는 숫자나 문자열처럼 변수나 프로퍼티의 값으로 할당될 수 있다
 var foo = 100;
-var bar = function () { 
-    return 100;
+var bar = function () {
+return 100;
 }
 
 var obj = {};
 obj.baz = function () {
-    return 200;
+return 200;
 }
 
 // 함수는 다른 함수의 인자로 전달 가능하다
 var foo = function (func) {
-    func();
+func();
 }
 
 foo(function () {
-    console.log('Function can be used as the argument');
+console.log('Function can be used as the argument');
 }
 
 // 함수는 다른 함수의 리턴값으로도 활용할 수 있다
 var foo = function () {
-    return function () {
-        console.log('Function can be used as the return value');
-    }
+return function () {
+console.log('Function can be used as the return value');
+}
 }
 {% endhighlight %}
 
@@ -104,7 +104,7 @@ var foo = function () {
 
 {% highlight javascript linenos%}
 window.onload = function() {
-    alert('This is the callback function');
+alert('This is the callback function');
 }
 {% endhighlight %}
 
@@ -115,7 +115,7 @@ window.onload = function() {
 
 {% highlight javascript linenos%}
 (function (name) {
-    console.log('This is the immediate function', name);
+console.log('This is the immediate function', name);
 })();
 
 // ES6
@@ -129,14 +129,14 @@ window.onload = function() {
 
 {% highlight javascript linenos%}
 function addSquare(a, b) {
-    function square(x) {
-        return x * x;
-    }
-    return square(a) + square(b);
+function square(x) {
+return x \* x;
+}
+return square(a) + square(b);
 }
 
-a = addSquare(2, 3);    // return 13
-b = addSquare(3, 4);    // return 25
+a = addSquare(2, 3); // return 13
+b = addSquare(3, 4); // return 25
 {% endhighlight %}
 
 > 화살표 함수 (Arrow function)
@@ -157,18 +157,19 @@ b = addSquare(3, 4);    // return 25
 > 이 과정은 최상위 객체인 Object의 프로토타입까지 연결되어 있으며 멤버를 찾거나 혹은 찾지 못하고 null을 반환하게 되는데, 이러한 객체들의 연쇄를 `프로토타입 체인`이라 한다.
 
 #### 속성
+
 - `arguments` : 현재 실행중인 함수에 전달된 인수를 포함하는 배열 같은 객체 (Array-like Object)
-> 참고: Array-like Object란?
-> `arguments`가 `length`속성과 더불어 0부터 인덱스 된 다른 속성을 가지고 있지만, `Array`의 `foreach`, `map`과 같은 내장 메서드를 가지고 있지 않음을 의미한다.
+  > 참고: Array-like Object란?
+  > `arguments`가 `length`속성과 더불어 0부터 인덱스 된 다른 속성을 가지고 있지만, `Array`의 `foreach`, `map`과 같은 내장 메서드를 가지고 있지 않음을 의미한다.
 - `caller` : 현재 실행 중인 함수를 호출한 함수
 - `name` : 함수의 이름을 나타내며, 만약 이름이 없는 익명 함수라면 빈 문자열이 된다
 - `length` : ECMAScript에서 정한 모든 함수가 가져야 하는 표준 프로퍼티로, 함수가 정상적으로 실행될 때 기대되는 인자의 개수
 - `_proto_` : 모든 자바스크립트의 객체는 자신의 프로토타입을 가리키는 [[Prototype]]이라는 내부 프로퍼티를 가지고 있다. 크롬 브라우저에서는 [[Prototype]]이라는 내부 프로퍼티가 `_proto_`로 구현되어 있어, 같은 개념이라고 생각하면 된다.
 - `prototype` : 모든 함수는 `Function` 객체이며 `Function.prototype`에서 메서드 및 속성을 상속받는다.
-앞서 언급한 모든 객체의 부모를 나타내는 내부 프로퍼티인 [[Prototype]]과 혼동하지 말아야 한다.
-두 프로퍼티 모두 **프로토타입 객체**를 가리킨다는 점에서는 공통점이 있다.
-그러나, [[Prototype]]은 객체 입장에서 자신의 부모 역할을 하는 프로토타입 객체를 가리키는 반면,
-함수 객체가 가지는 prototype 프로퍼티는 함수가 생성될 때 만들어지며, 단지 constructor 프로퍼티 하나만 있는 객체를 가리킨다.
+  앞서 언급한 모든 객체의 부모를 나타내는 내부 프로퍼티인 [[Prototype]]과 혼동하지 말아야 한다.
+  두 프로퍼티 모두 **프로토타입 객체**를 가리킨다는 점에서는 공통점이 있다.
+  그러나, [[Prototype]]은 객체 입장에서 자신의 부모 역할을 하는 프로토타입 객체를 가리키는 반면,
+  함수 객체가 가지는 prototype 프로퍼티는 함수가 생성될 때 만들어지며, 단지 constructor 프로퍼티 하나만 있는 객체를 가리킨다.
 
 #### 메서드
 

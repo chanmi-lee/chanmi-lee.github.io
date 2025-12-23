@@ -2,7 +2,7 @@
 
 ```
 - currently working at Lunit. Previously worked at Gmarket (eBay Korea) as software engineer.
-- 
+-
 ```
 
 ---

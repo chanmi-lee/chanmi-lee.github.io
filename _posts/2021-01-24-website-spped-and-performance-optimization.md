@@ -47,7 +47,7 @@ toc:
 
 `Oppertunities`와 `Dignostics`는 현재 웹페이지의 문제점과 성능 최적화를 위한 가이드를 제시해주는 부분입니다.
 
-`Opportunities`는 로딩 성능과 관련된 내용으로 어떻게 리소스를 더 빠르게 로딩할 수 있는지의 관점에서 개선 포인트를 나열해주고 있습니다. 
+`Opportunities`는 로딩 성능과 관련된 내용으로 어떻게 리소스를 더 빠르게 로딩할 수 있는지의 관점에서 개선 포인트를 나열해주고 있습니다.
 `Dignostics`는 렌더링 성능과 관련된 내용으로 그 개선점을 나열해주고 있습니다.
 
 각 항목의 상세 정보를 통해 리소스 별로 차지하는 비중을 확인할 수 있습니다.
@@ -117,55 +117,56 @@ DCL, FP, FCP, LCP, L 등의 순서를 확인할 수 있으며 각각의 의미�
 > 로딩 성능 최적화
 
 - 리소스 최적화
-    - 텍스트 압축
-    - 이미지 사이즈 최적화
-        - 개별 이미지 대신 이미지 스프라이트 사용 ([CSS Image Sprites](https://www.w3schools.com/css/css_image_sprites.asp))
-        - 이미지 CDN을 통한 최적화
-    - 리소스 캐싱 ([MDN : HTTP Caching](https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching))
-    - 이미지 Preload & Lazy load
-    - webpack 등의 번들러를 통한 번들된 리소스 활용
-    - 컴포넌트 Preloading
+  - 텍스트 압축
+  - 이미지 사이즈 최적화
+    - 개별 이미지 대신 이미지 스프라이트 사용 ([CSS Image Sprites](https://www.w3schools.com/css/css_image_sprites.asp))
+    - 이미지 CDN을 통한 최적화
+  - 리소스 캐싱 ([MDN : HTTP Caching](https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching))
+  - 이미지 Preload & Lazy load
+  - webpack 등의 번들러를 통한 번들된 리소스 활용
+  - 컴포넌트 Preloading
 
 {% highlight javascript linenos%}
 import React, { useState, useEffect, Suspense, lazy } from 'react'
 
 // factory pattern
 function lazyWithPreload(lazyImport) {
-  const Component = React.lazy(lazyImport)
-  Component.preload = lazyImport
-  return Component
+const Component = React.lazy(lazyImport)
+Component.preload = lazyImport
+return Component
 }
 
 // lazyLoad 대상이 되는 컴포넌트들을 선언
 const lazyModal = lazyWithPreload(() => import('./components/ImageModal'))
 
 function App() {
-  const [showModal, setShowModal] = useState(false)
+const [showModal, setShowModal] = useState(false)
 
-  useEffect(() => {
-      lazyModal.preload()
-      // factory pattern을 사용하지 않는다면 아래와 같이 직접 import
-      const imageModal = import('./component/ImageModal')
-  })
-  
-  render (
-      <div className="App">
-        <Header />
-            ...
-        <Footer />
-        <Suspense fallback={<div>Loading...</div>}>
-            {showModal ? <LazyModal closeModal={() => setShowModal(false)} /> : ''}
-        </Suspense>
-      </div>
-  )
+useEffect(() => {
+lazyModal.preload()
+// factory pattern을 사용하지 않는다면 아래와 같이 직접 import
+const imageModal = import('./component/ImageModal')
+})
+
+render (
+<div className="App">
+<Header />
+...
+<Footer />
+<Suspense fallback={<div>Loading...</div>}>
+{showModal ? <LazyModal closeModal={() => setShowModal(false)} /> : ''}
+</Suspense>
+</div>
+)
 }
 {% endhighlight %}
-    
+
 > 렌더링 성능 최적화
 
 - css는 HTML 문서 최상단(`<head>` 아래), script 태그는 HTML 문서 최하단(`</body>` 직전)에 작성
 
 {% highlight html linenos%}
+
 <head>
   <link href="style.css" rel="stylesheet" />
 </head>
@@ -176,27 +177,24 @@ function App() {
 {% endhighlight%}
 
 **Why?**
+
 > 렌더 트리를 구성하기 위해서는 `DOM 트리`와 `CSSOM 트리`가 필요합니다.
-DOM 트리는 파싱 중 태그를 발견할 때마다 순차적 구성이 가능하나, CSSOM 트리는 CSS를 모두 해석해야 구성이 가능합니다.
-때문에 CSS는 렌더링 차단 리소스라고 하며, 렌더링이 되지 않도록 항상 `<head>` 아래에 작성해야 합니다.
+> DOM 트리는 파싱 중 태그를 발견할 때마다 순차적 구성이 가능하나, CSSOM 트리는 CSS를 모두 해석해야 구성이 가능합니다.
+> 때문에 CSS는 렌더링 차단 리소스라고 하며, 렌더링이 되지 않도록 항상 `<head>` 아래에 작성해야 합니다.
 
 - `<script>`의 `defer`,`async` 속성 활용
-    - 단, 브라우저별로 지원 범위가 상이함 (**[can I use](https://caniuse.com)** 에서 확인)
-- 병목 코드 개선
-    - 반복 호출 제거
-    - 중복 코드 제거
-    - 만능 유틸 사용을 지양하고 필요한 기능만 활용
-      - ex) lodash 사용 시 필요한 함수만 부분적으로 사용 혹은 직접 필요한 모듈 구현하기
-{% highlight javascript linenos%}
-// instead of 
-import _ from 'lodash'
-// use
-import { get, reduce } from 'lodash'
-{% endhighlight %}
+  - 단, 브라우저별로 지원 범위가 상이함 (**[can I use](https://caniuse.com)** 에서 확인)
+- 병목 코드 개선 - 반복 호출 제거 - 중복 코드 제거 - 만능 유틸 사용을 지양하고 필요한 기능만 활용 - ex) lodash 사용 시 필요한 함수만 부분적으로 사용 혹은 직접 필요한 모듈 구현하기
+  {% highlight javascript linenos%}
+  // instead of
+  import \_ from 'lodash'
+  // use
+  import { get, reduce } from 'lodash'
+  {% endhighlight %}
 - `repaint`, `reflow` 줄이기
-    - DOM 및 스타일 변경 최소화
-    - 불필요한 마크업 사용 지양
-    - ...
+  - DOM 및 스타일 변경 최소화
+  - 불필요한 마크업 사용 지양
+  - ...
 
 ---
 

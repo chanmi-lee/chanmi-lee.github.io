@@ -17,7 +17,7 @@ React의 구성 방식으로부터 파생된 패턴이라고 이해할 수 있�
 구체적으로 HOC는 컴포넌트를 파라미터로 받아 이를 새로운 컴포넌트로 돌려주는 하나의 함수라고 이해할 수 있습니다.
 
 ```jsx
-const EnhancedComponent = higherOrderComponent(WrappedComponent)
+const EnhancedComponent = higherOrderComponent(WrappedComponent);
 ```
 
 HOC를 통하여 컴포넌트에 특정 기능을 부여할 수 있습니다.
@@ -30,7 +30,7 @@ HOC는 3rd party 라이브러리에서 흔히 찾아볼 수 있는데 대표적�
 
 ### HOC의 유용성
 
-> 이전에는 관심사의 분리(cross-cutting concerns)을 다루기 위한 방법으로 `mixins`을 사용하길 권장하였습니다. 
+> 이전에는 관심사의 분리(cross-cutting concerns)을 다루기 위한 방법으로 `mixins`을 사용하길 권장하였습니다.
 > 그러나, 이 방법이 다소 많은 문제점을 야기한다는 것을 알게 되었습니다.
 > [링크](https://reactjs.org/blog/2016/07/13/mixins-considered-harmful.html) 를 참고하시면, 왜 우리가 mixins를 지양해야하며 어떻게 기존 컴포넌트를 변화시킬 수 있는지 이해하는데 도움이 될 것입니다.
 
@@ -41,32 +41,32 @@ React에서 컴포넌트는 코드를 재사용하는 주요한 코드의 단위
 
 {% highlight javascript linenos%}
 class CommentList extends React.Component {
-    constructor(props) {
-      super(props)
-      this.handleChange = this.handleChange.bind(this)
-      this.state = {
-        // "DataSource" is some global data source
-        comments: DataSource.getComments()
-      }
-    }
-  
+constructor(props) {
+super(props)
+this.handleChange = this.handleChange.bind(this)
+this.state = {
+// "DataSource" is some global data source
+comments: DataSource.getComments()
+}
+}
+
     componentDidMount() {
       // Subscribe to changes
       DataSource.addChangeListener(this.handleChange)
     }
-  
+
     componentWillUnmount() {
       // Clean up listener
       DataSource.removeChangeListener(this.handleChange)
     }
-  
+
     handleChange() {
       // Update component state whenever the data source changes
       this.setState({
         comments: DataSource.getComments()
       })
     }
-  
+
     render() {
       return (
         <div>
@@ -76,38 +76,39 @@ class CommentList extends React.Component {
         </div>
       )
     }
-  }
+
+}
 {% endhighlight %}
 
 또한, 같은 패턴을 가지며 하나의 포스트를 위한 `BlogPost`라는 이름 컴포넌트를 작성합니다.
 
 {% highlight javascript linenos%}
 class BlogPost extends React.Component {
-  constructor(props) {
-    super(props)
-    this.handleChange = this.handleChange.bind(this)
-    this.state = {
-      blogPost: DataSource.getBlogPost(props.id)
-    }
-  }
+constructor(props) {
+super(props)
+this.handleChange = this.handleChange.bind(this)
+this.state = {
+blogPost: DataSource.getBlogPost(props.id)
+}
+}
 
-  componentDidMount() {
-    DataSource.addChangeListener(this.handleChange)
-  }
+componentDidMount() {
+DataSource.addChangeListener(this.handleChange)
+}
 
-  componentWillUnmount() {
-    DataSource.removeChangeListener(this.handleChange)
-  }
+componentWillUnmount() {
+DataSource.removeChangeListener(this.handleChange)
+}
 
-  handleChange() {
-    this.setState({
-      blogPost: DataSource.getBlogPost(this.props.id)
-    })
-  }
+handleChange() {
+this.setState({
+blogPost: DataSource.getBlogPost(this.props.id)
+})
+}
 
-  render() {
-    return <TextBlock text={this.state.blogPost} />
-  }
+render() {
+return <TextBlock text={this.state.blogPost} />
+}
 }
 {% endhighlight %}
 
@@ -117,7 +118,6 @@ class BlogPost extends React.Component {
 - 마운트될 때(componentDidMount), DataSource로의 change listener를 추가한다.
 - 리스너 내부에, 데이터가 변경될 때마다 setState를 호출한다 (handleChange).
 - 언마운트될 때(componentWillUnmount), change listener를 제거한다.
-
 
 ---
 
@@ -130,16 +130,15 @@ HOC의 원리는 파라미터로 컴포넌트를 받아오고 함수 내부에�
 
 우선 HOC의 틀을 작성해보겠습니다.
 
-
 {% highlight javascript linenos%}
 const CommentListWithSubscription = withSubscription(
-    CommentList,
-    (DataSource) => DataSource.getComments()
+CommentList,
+(DataSource) => DataSource.getComments()
 )
 
 const BlogPostWithSubscription = withSubscription(
-    BlogPost,
-    (DataSource, props) => DataSource.getBlogPost(props.id)
+BlogPost,
+(DataSource, props) => DataSource.getBlogPost(props.id)
 )
 {% endhighlight %}
 
@@ -152,15 +151,15 @@ const BlogPostWithSubscription = withSubscription(
 {% highlight javascript linenos%}
 // This function takes a component...
 function withSubscription(WrappedComponent, selectData) {
-  // ...and returns another component...
-  return class extends React.Component {
-    constructor(props) {
-      super(props)
-      this.handleChange = this.handleChange.bind(this)
-      this.state = {
-        data: selectData(DataSource, props)
-      }
-    }
+// ...and returns another component...
+return class extends React.Component {
+constructor(props) {
+super(props)
+this.handleChange = this.handleChange.bind(this)
+this.state = {
+data: selectData(DataSource, props)
+}
+}
 
     componentDidMount() {
       // ... that takes care of the subscription...
@@ -182,7 +181,8 @@ function withSubscription(WrappedComponent, selectData) {
       // Notice that we pass through any additional props
       return <WrappedComponent data={this.state.data} {...this.props} />
     }
-  }
+
+}
 }
 {% endhighlight %}
 
@@ -211,11 +211,11 @@ React의 diffing algorithm (혹은 reconciliation라고 불린다) 은 기존의
 
 {% highlight javascript linenos%}
 render() {
-  // A new version of EnhancedComponent is created on every render
-  // EnhancedComponent1 !== EnhancedComponent2
-  const EnhancedComponent = enhance(MyComponent)
-  // That causes the entire subtree to unmount/remount each time!
-  return <EnhancedComponent />
+// A new version of EnhancedComponent is created on every render
+// EnhancedComponent1 !== EnhancedComponent2
+const EnhancedComponent = enhance(MyComponent)
+// That causes the entire subtree to unmount/remount each time!
+return <EnhancedComponent />
 }
 {% endhighlight %}
 
@@ -233,7 +233,7 @@ render() {
 
 {% highlight javascript linenos%}
 // Define a static method
-WrappedComponent.staticMethod = function() {/*...*/}
+WrappedComponent.staticMethod = function() {/_..._/}
 // Now apply a HOC
 const EnhancedComponent = enhance(WrappedComponent)
 
@@ -245,10 +245,10 @@ typeof EnhancedComponent.staticMethod === 'undefined' // true
 
 {% highlight javascript linenos%}
 function enhance(WrappedComponent) {
-    class Enhance extends React.Component {/*...*/}
-    // Must know excatly which method(s) to copy :(
-    Enhance.staticMethod = WrappedComponent.staticMethod
-    return Enhance
+class Enhance extends React.Component {/_..._/}
+// Must know excatly which method(s) to copy :(
+Enhance.staticMethod = WrappedComponent.staticMethod
+return Enhance
 }
 {% endhighlight %}
 
@@ -258,9 +258,9 @@ function enhance(WrappedComponent) {
 {% highlight javascript linenos%}
 import hoistNonReactStatic from 'hoist-non-react-statics'
 function enhance(WrappedComponent) {
-  class Enhance extends React.Component {/*...*/}
-  hoistNonReactStatic(Enhance, WrappedComponent)
-  return Enhance
+class Enhance extends React.Component {/_..._/}
+hoistNonReactStatic(Enhance, WrappedComponent)
+return Enhance
 }
 {% endhighlight %}
 
