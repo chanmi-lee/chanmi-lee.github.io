@@ -29,6 +29,7 @@ function Example() {
 const [count, setCount] = useState(0)
 
 return (
+
 <div>
 <p>You clicked {count} times</p>
 <button onClick={() => setCount(count + 1)}>
@@ -102,6 +103,7 @@ document.title = `You clicked ${count} times`
 })
 
 return (
+
 <div>
 <p>You clicked {count} times</p>
 <button onClick={() => setCount(count + 1)}>
@@ -236,6 +238,7 @@ function FriendListItem(props) {
 const isOnline = useFriendStatus(props.friend.id)
 
 return (
+
 <li style={%raw%}{{ color: isOnline ? 'green' : 'black' }}{%endraw%}>
 {props.friend.name}
 </li>

@@ -46,6 +46,7 @@ alert(`입력한 이름: ${name}`);
 };
 
 return (
+
 <form onSubmit={handleSubmit}>
 <input type="text" value={name} onChange={handleChange} />
 <button type="submit">제출</button>
@@ -81,6 +82,7 @@ alert(`입력한 이름: ${nameRef.current.value}`);
 };
 
 return (
+
 <form onSubmit={handleSubmit}>
 <input type="text" ref={nameRef} />
 <button type="submit">제출</button>

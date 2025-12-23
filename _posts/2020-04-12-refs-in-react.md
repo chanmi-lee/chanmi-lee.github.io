@@ -74,6 +74,7 @@ render() {
 // tell React that we want to associate the <input> ref
 // with the `textInput` that we created in the constructor
 return (
+
 <div>
 <input
           type="text"
@@ -151,6 +152,7 @@ textInput.current.focus()
 }
 
 return (
+
 <div>
 <input
         type="text"
