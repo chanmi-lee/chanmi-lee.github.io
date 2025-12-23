@@ -15,11 +15,12 @@ toc:
 Google's BLS (Brand Lift Survey) is a measurement to measure the impact of online brand campaign with YouTube video ads.
 About a day after seeing (or not seeing) the ad, a brief survey is delivered to both of the groups.
 Google checks the impact of the campaigns on the brand on five levels:
-* Ad Recall
-* Brand Awareness
-* Brand Interest
-* Consideration
-* Purchase Intent
+
+- Ad Recall
+- Brand Awareness
+- Brand Interest
+- Consideration
+- Purchase Intent
 
 Consolidating data across soures, crunching numbers and creating reports can be a tedious process.
 No one likes doing the same things over and over again.
@@ -37,11 +38,8 @@ Being able to deliver a report to each client quickly is important and also auto
 
 > Also, more than 30 people gave me 4.5 out of 5 starts !
 
-
-
 The basic template of BLS is as follows:
 {% include figure.liquid loading="eager" path="assets/img/projects/project-bls-template.png" class="img-fluid rounded z-depth-1" %}
-
 
 With this tool, the only thing you have to do is just typing the unique campaign ID.
 The benefits of automated report are productivity, cost/effort reduction, and performance.
@@ -50,12 +48,13 @@ The benefits of automated report are productivity, cost/effort reduction, and pe
 
 ### Period
 
-* 2017-01 ~ 2017.02 (4 weeks for implementing)
-* 2017.02 ~ (operating until NOW!)
+- 2017-01 ~ 2017.02 (4 weeks for implementing)
+- 2017.02 ~ (operating until NOW!)
 
 ---
 
 ### Used skills
+
 - Apps Script
 - Google APIs (Slide, Adwords, Analytics)
 - Chart.js

@@ -25,17 +25,18 @@ Hooks은 이전 리액트 버전과 호환됩니다. 아래 내용이 다소 빠
 import React, { useState } from 'react'
 
 function Example() {
-  // count라는 이름의 state 변수를 선언합니다.
-  const [count, setCount] = useState(0)
+// count라는 이름의 state 변수를 선언합니다.
+const [count, setCount] = useState(0)
 
-  return (
-    <div>
-      <p>You clicked {count} times</p>
-      <button onClick={() => setCount(count + 1)}>
-        Click me
-      </button>
-    </div>
-  )
+return (
+
+<div>
+<p>You clicked {count} times</p>
+<button onClick={() => setCount(count + 1)}>
+Click me
+</button>
+</div>
+)
 }
 {% endhighlight%}
 
@@ -57,11 +58,11 @@ function Example() {
 
 {% highlight javascript linenos%}
 function ExampleWithManyStates() {
-  // Declare multiple state variables!
-  const [age, setAge] = useState(42)
-  const [fruit, setFruit] = useState('banana')
-  const [todos, setTodos] = useState([{ text: 'Learn Hooks' }])
-  // ...
+// Declare multiple state variables!
+const [age, setAge] = useState(42)
+const [fruit, setFruit] = useState('banana')
+const [todos, setTodos] = useState([{ text: 'Learn Hooks' }])
+// ...
 }
 {% endhighlight%}
 
@@ -93,22 +94,23 @@ Hooks은 클래스 내에서는 동작하지 않습니다. (기존 클래스 컴
 import React, { useState, useEffect } from 'react'
 
 function Example() {
-  const [count, setCount] = useState(0)
+const [count, setCount] = useState(0)
 
-  // componentDidMount, componentDidUpdate와 유사:
-  useEffect(() => {
-    // browser API 를 사용하여 문서 제목을 업데이트
-    document.title = `You clicked ${count} times`
-  })
+// componentDidMount, componentDidUpdate와 유사:
+useEffect(() => {
+// browser API 를 사용하여 문서 제목을 업데이트
+document.title = `You clicked ${count} times`
+})
 
-  return (
-    <div>
-      <p>You clicked {count} times</p>
-      <button onClick={() => setCount(count + 1)}>
-        Click me
-      </button>
-    </div>
-  )
+return (
+
+<div>
+<p>You clicked {count} times</p>
+<button onClick={() => setCount(count + 1)}>
+Click me
+</button>
+</div>
+)
 }
 {% endhighlight%}
 
@@ -124,23 +126,23 @@ Effects는 또한 함수를 '정리'하여 반환하는 방법이기도 합니�
 import React, { useState, useEffect } from 'react'
 
 function FriendStatus(props) {
-  const [isOnline, setIsOnline] = useState(null)
+const [isOnline, setIsOnline] = useState(null)
 
-  function handleStatusChange(status) {
-    setIsOnline(status.isOnline)
-  }
+function handleStatusChange(status) {
+setIsOnline(status.isOnline)
+}
 
-  useEffect(() => {
-    ChatAPI.subscribeToFriendStatus(props.friend.id, handleStatusChange)
-    return () => {
-      ChatAPI.unsubscribeFromFriendStatus(props.friend.id, handleStatusChange)
-    }
-  })
+useEffect(() => {
+ChatAPI.subscribeToFriendStatus(props.friend.id, handleStatusChange)
+return () => {
+ChatAPI.unsubscribeFromFriendStatus(props.friend.id, handleStatusChange)
+}
+})
 
-  if (isOnline === null) {
-    return 'Loading...'
-  }
-  return isOnline ? 'Online' : 'Offline'
+if (isOnline === null) {
+return 'Loading...'
+}
+return isOnline ? 'Online' : 'Offline'
 }
 {% endhighlight%}
 
@@ -151,23 +153,23 @@ function FriendStatus(props) {
 
 {% highlight javascript linenos%}
 function FriendStatusWithCounter(props) {
-  const [count, setCount] = useState(0)
-  useEffect(() => {
-    document.title = `You clicked ${count} times`
-  })
+const [count, setCount] = useState(0)
+useEffect(() => {
+document.title = `You clicked ${count} times`
+})
 
-  const [isOnline, setIsOnline] = useState(null)
-  useEffect(() => {
-    ChatAPI.subscribeToFriendStatus(props.friend.id, handleStatusChange)
-    return () => {
-      ChatAPI.unsubscribeFromFriendStatus(props.friend.id, handleStatusChange)
-    }
-  })
+const [isOnline, setIsOnline] = useState(null)
+useEffect(() => {
+ChatAPI.subscribeToFriendStatus(props.friend.id, handleStatusChange)
+return () => {
+ChatAPI.unsubscribeFromFriendStatus(props.friend.id, handleStatusChange)
+}
+})
 
-  function handleStatusChange(status) {
-    setIsOnline(status.isOnline)
-  }
-  // ...
+function handleStatusChange(status) {
+setIsOnline(status.isOnline)
+}
+// ...
 }
 {% endhighlight%}
 
@@ -200,20 +202,20 @@ Custom Hooks을 사용하면, 더 많은 컴포넌트를 트리에 추가하지 
 import React, { useState, useEffect } from 'react'
 
 function useFriendStatus(friendID) {
-  const [isOnline, setIsOnline] = useState(null)
+const [isOnline, setIsOnline] = useState(null)
 
-  function handleStatusChange(status) {
-    setIsOnline(status.isOnline)
-  }
+function handleStatusChange(status) {
+setIsOnline(status.isOnline)
+}
 
-  useEffect(() => {
-    ChatAPI.subscribeToFriendStatus(friendID, handleStatusChange)
-    return () => {
-      ChatAPI.unsubscribeFromFriendStatus(friendID, handleStatusChange)
-    }
-  })
+useEffect(() => {
+ChatAPI.subscribeToFriendStatus(friendID, handleStatusChange)
+return () => {
+ChatAPI.unsubscribeFromFriendStatus(friendID, handleStatusChange)
+}
+})
 
-  return isOnline
+return isOnline
 }
 {% endhighlight%}
 
@@ -222,24 +224,25 @@ function useFriendStatus(friendID) {
 
 {% highlight javascript linenos%}
 function FriendStatus(props) {
-  const isOnline = useFriendStatus(props.friend.id)
+const isOnline = useFriendStatus(props.friend.id)
 
-  if (isOnline === null) {
-    return 'Loading...'
-  }
-  return isOnline ? 'Online' : 'Offline'
+if (isOnline === null) {
+return 'Loading...'
+}
+return isOnline ? 'Online' : 'Offline'
 }
 {% endhighlight%}
 
 {% highlight javascript linenos%}
 function FriendListItem(props) {
-  const isOnline = useFriendStatus(props.friend.id)
+const isOnline = useFriendStatus(props.friend.id)
 
-  return (
-    <li style={%raw%}{{ color: isOnline ? 'green' : 'black' }}{%endraw%}>
-      {props.friend.name}
-    </li>
-  )
+return (
+
+<li style={%raw%}{{ color: isOnline ? 'green' : 'black' }}{%endraw%}>
+{props.friend.name}
+</li>
+)
 }
 {% endhighlight%}
 
@@ -262,9 +265,9 @@ function FriendListItem(props) {
 
 {% highlight javascript linenos%}
 function Example() {
-  const locale = useContext(LocaleContext)
-  const theme = useContext(ThemeContext)
-  // ...
+const locale = useContext(LocaleContext)
+const theme = useContext(ThemeContext)
+// ...
 }
 {% endhighlight%}
 
@@ -272,13 +275,12 @@ function Example() {
 
 {% highlight javascript linenos%}
 function Todos() {
-  const [todos, dispatch] = useReducer(todosReducer)
-  // ...
+const [todos, dispatch] = useReducer(todosReducer)
+// ...
 }
 {% endhighlight%}
 
 > [Hooks API Reference](https://reactjs.org/docs/hooks-reference.html) 에서 내장 Hooks에 대한 자세한 내용을 확인 할 수 있습니다.
-
 
 ---
 

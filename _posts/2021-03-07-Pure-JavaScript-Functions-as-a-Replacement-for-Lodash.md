@@ -23,14 +23,14 @@ Lodash나 Underscore.js 등의 라이브러리의 핵심 디자인 원칙은 **�
 여기에서, **함수형 프로그래밍**이란 무엇일까요?
 
 함수형 프로그래밍을 설명하는데는 여러 방법이 있지만, 다음과 같이 정의해볼 수 있습니다.
+
 > 함수형 프로그래밍은 **계산을 수학적 함수의 조합으로 생각하는 방식**을 의미합니다.
-프로그래밍이 실행될 때 전역 상태를 변경하는 명령문으로 구성된 **명령형 프로그래밍과 대조되는 개념**으로 이해할 수 있습니다.
-명령형 프로그래밍에서는 일반적인 프로그래밍 언어에서 함수가 특정 동작을 수행하는 역할을 담당하지만,
-함수형 프로그래밍에서는 일반적으로 전역 변수와 같은 변경 가능한(mutable) 상태의 사용을 피하고, **불변(immutable) 데이터**와 **side effect이 없는 함수**, 즉 함수의 실행이 외부에 영향을 끼치지 않는 함수를 사용하는 것을 지향합니다.
+> 프로그래밍이 실행될 때 전역 상태를 변경하는 명령문으로 구성된 **명령형 프로그래밍과 대조되는 개념**으로 이해할 수 있습니다.
+> 명령형 프로그래밍에서는 일반적인 프로그래밍 언어에서 함수가 특정 동작을 수행하는 역할을 담당하지만,
+> 함수형 프로그래밍에서는 일반적으로 전역 변수와 같은 변경 가능한(mutable) 상태의 사용을 피하고, **불변(immutable) 데이터**와 **side effect이 없는 함수**, 즉 함수의 실행이 외부에 영향을 끼치지 않는 함수를 사용하는 것을 지향합니다.
 
 여기서 중요한 것은, 사이드 이펙트가 없어야 한다는 점이며 이는 함수 내부에 상태가 존재하지 않고 함수의 출력 값은 항상 함수의 입력 값의 영향만 받는다는 것을 의미합니다.
 덕분에 테스트, 유지 관리가 쉽고 무엇보다도 예측 가능합니다.
-
 
 ## 예제
 
@@ -47,27 +47,26 @@ Lodash에 대한 내용은 [여기](https://bit.dev/lodash/lodash) 를 참고해
 
 {% highlight javascript linenos%}
 const users = [
-  { 'user': 'joey',  'age': 32 },
-  { 'user': 'ross',    'age': 41 },
-  { 'user': 'chandler', 'age': 39 }
+{ 'user': 'joey', 'age': 32 },
+{ 'user': 'ross', 'age': 41 },
+{ 'user': 'chandler', 'age': 39 }
 ]
 
 // Native
 users.find(function (o) { return o.age < 40; })
 
 //lodash
-_.find(users, function (o) { return o.age < 40; })
+\_.find(users, function (o) { return o.age < 40; })
 {% endhighlight %}
 
 위의 간단한 예제 코드를 통해, 네이티브 자바스크립트와 Lodash 각각의 성능을 살펴보겠습니다.
 
-> *find vs _.find *
+> _find vs \_.find _
 
 ![queue](https://miro.medium.com/max/1400/1*aw5pv3HKxsHsV1jh434UYg.png){: width="100%" height="100%"}
 
 하지만, 이 통계만 보고 순수 자바스크립트의 기능이 항상 Lodash의 것보다 성능이 좋다는 결론을 내릴 순 없습니다.
 다만, 네이티브 함수인 [find](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find) 이 lodash의 [find](https://lodash.com/docs/4.17.15#find) 보다 더 간결하고 읽기 쉽다는 장점이 있음은 분명해보입니다.
-
 
 ### filter
 
@@ -75,13 +74,13 @@ _.find(users, function (o) { return o.age < 40; })
 `filter`는 컬렉션에서 특정 조건을 충족하는 요소를 반환하는데 주로 사용됩니다.
 
 {% highlight javascript linenos%}
-const numbers = [10, 40, 230, 15, 18, 51, 1221]       
+const numbers = [10, 40, 230, 15, 18, 51, 1221]
 
-_.filter(numbers, num => num % 3 === 0)
+\_.filter(numbers, num => num % 3 === 0)
 numbers.filter(num => num % 3 === 0)
 {% endhighlight%}
 
-> *_.filter vs array.filter*
+> _\_.filter vs array.filter_
 
 ![queue](https://miro.medium.com/max/1400/1*lstVPT2qm3OesKxOm3OoGg.png){: width="100%" height="100%"}
 
@@ -90,27 +89,27 @@ numbers.filter(num => num % 3 === 0)
 ### each
 
 반대로 lodash 함수를 사용할 때 유익한 경우도 있습니다.
-아래 예제는 내장된 이터레이터인 [Array.prototype.forEach](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach) 보다 lodash의 [_.forEach](https://lodash.com/docs/4.17.15#forEach) 를 사용하는 것이 좋음을 보여주고 있습니다.
+아래 예제는 내장된 이터레이터인 [Array.prototype.forEach](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach) 보다 lodash의 [\_.forEach](https://lodash.com/docs/4.17.15#forEach) 를 사용하는 것이 좋음을 보여주고 있습니다.
 
 {% highlight javascript linenos%}
-_.each([1, 2, 3], (value, index) => {
-  console.log(value)
+\_.each([1, 2, 3], (value, index) => {
+console.log(value)
 })
 
 [1, 2, 3].forEach((value, index) => {
-  console.log(value)
+console.log(value)
 })
 
-_.forEach({ 'a': 1, 'b': 2 }, (value, key) => {
-  console.log(key);
+\_.forEach({ 'a': 1, 'b': 2 }, (value, key) => {
+console.log(key);
 });
 
 ({ 'a': 1, 'b': 2 }).forEach((value, key) => { // !error
-  console.log(key); 
+console.log(key);
 });
 {% endhighlight%}
 
-> *_.each vs forEach vs map*
+> _\_.each vs forEach vs map_
 
 ![queue](https://miro.medium.com/max/1400/1*sqlnG7flP2igrYUnt7YSzA.png){: width="100%" height="100%"}
 
@@ -124,19 +123,18 @@ _.forEach({ 'a': 1, 'b': 2 }, (value, key) => {
 
 `every`는 배열의 모든 요소를 순회하며 특정 조건을 충족하는지 여부를 테스트합니다.
 
-
 {% highlight javascript linenos%}
 const elements = ["cat", "dog", "bat"]
 
-_.every(elements, el => el.length == 3)
+\_.every(elements, el => el.length == 3)
 elements.every(el => el.length == 3) //true
 {% endhighlight%}
 
-> *_.every vs array.every*
+> _\_.every vs array.every_
 
 ![queue](https://miro.medium.com/max/1400/1*_CJMbz8wzHiv6R2SP7h9Gw.png){: width="100%" height="100%"}
 
-이번에도 [Array.prototype.every](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every) 가 `_.every`보다 훨씬 빠르다는 결과를 얻었습니다. 
+이번에도 [Array.prototype.every](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every) 가 `_.every`보다 훨씬 빠르다는 결과를 얻었습니다.
 
 ### some
 
@@ -145,11 +143,11 @@ elements.every(el => el.length == 3) //true
 {% highlight javascript linenos%}
 const elements = ["cat", "dog", "bat"]
 
-_.some(elements, el => el.startsWith('c'))
+\_.some(elements, el => el.startsWith('c'))
 elements.some(el => el.startsWith('c'))
 {% endhighlight%}
 
-> *array.some vs _.some*
+> _array.some vs \_.some_
 
 ![queue](https://miro.medium.com/max/1400/1*EBznqoWTqNjrARQE_yJpTw.png){: width="100%" height="100%"}
 
@@ -162,11 +160,11 @@ elements.some(el => el.startsWith('c'))
 {% highlight javascript linenos%}
 const primes = [2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,97]
 
-_.includes(primes, 47)
+\_.includes(primes, 47)
 primes.includes(79)
 {% endhighlight%}
 
-> *array.includes vs _.includes*
+> _array.includes vs \_.includes_
 
 ![queue](https://miro.medium.com/max/1400/1*WW2NTx8Ka4PKul6gPPvOuQ.png){: width="100%" height="100%"}
 
@@ -179,11 +177,11 @@ primes.includes(79)
 {% highlight javascript linenos%}
 var elements = [1,2,3,1,2,4,2,3,5,3]
 
-_.uniq(elements)
+\_.uniq(elements)
 [...new Set(elements)]
 {% endhighlight%}
 
-> *_.uniq vs Set*
+> _\_.uniq vs Set_
 
 ![queue](https://miro.medium.com/max/1400/1*GOx7k9e6DFast8jPSmPKpQ.png){: width="100%" height="100%"}
 
@@ -192,7 +190,7 @@ _.uniq(elements)
 또는 아래와 같은 방식도 고려해볼 수 있습니다.
 
 ```javascript
-elements.filter((value, index, array) => array.indexof(value) === index)
+elements.filter((value, index, array) => array.indexof(value) === index);
 ```
 
 ### compact
@@ -202,7 +200,7 @@ elements.filter((value, index, array) => array.indexof(value) === index)
 {% highlight javascript linenos%}
 var array = [undefined, 'cat', false, 434, '', 32.0]
 
-_.compact(array)
+\_.compact(array)
 array.filter(Boolean)
 // same as writing: (a.k.a Syntactic sugar)
 // array.filter(function (x) { return Boolean(x); });

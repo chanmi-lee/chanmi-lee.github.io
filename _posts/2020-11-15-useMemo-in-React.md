@@ -14,8 +14,8 @@ toc:
 Hook이란 함수형 컴포넌트에서 State, LifeCycle, Reference 등의 클래스형 컴포넌트의 기능을 구현한 개념으로, 이를 통해 memoization 기법을 함수형 컴포넌트에도 쉽게 적용할 수 있습니다.
 
 > **memoization**는 알고리즘 성능 최적화에 자주 쓰이는 개념 중 하나로, 이름 그대로 메모를 하는 것을 의미합니.
-프로그래밍에서 반복되는 결과를 메모리에 저장해두고 동일한 연산이 필요한 경우 이를 재활용하는 기법을 의미합니다.
-이를 적절히 활용하면 중복을 피하고 애플리케이션의 속도를 향상시킬 수 있다는 이점이 있습니다.
+> 프로그래밍에서 반복되는 결과를 메모리에 저장해두고 동일한 연산이 필요한 경우 이를 재활용하는 기법을 의미합니다.
+> 이를 적절히 활용하면 중복을 피하고 애플리케이션의 속도를 향상시킬 수 있다는 이점이 있습니다.
 
 React에서 컴포넌트 랜더링은 빈번하게 일어나는데, 대표적인 사례로는 컴포넌트 자신의 상태 변경 혹은 부모 컴포넌트의 상태 변경의 영향으로 함께 리랜더링 되는 경우 등이 있습니다.
 만약 컴포넌트의 리랜더링에 불필요하게 오랜 시간이 걸린다면, 사용자는 UI에서 지연이 발생하는 경험을 하게 됩니다.
@@ -33,7 +33,7 @@ const memoizedValue = useMemo(() => computeExpensiveValue(a, b), [a, b]);
 때문에 랜더링과 관련된 내용만 전달해야하며, 랜더링과 관계 없는 경우는 `useEffect`를 사용하길 권장합니다.
 
 > 전달되는 콜백 함수의 이름이 `computeExpensiveValue`라는데서 짐작할 수 있지만,
-`useMemo`를 통해 재활용되는 로직이 복잡한 경우 불필요한 연산을 막을 수 있고 성능상의 차이를 가져올 수 있습니다.
+> `useMemo`를 통해 재활용되는 로직이 복잡한 경우 불필요한 연산을 막을 수 있고 성능상의 차이를 가져올 수 있습니다.
 
 ---
 
@@ -45,8 +45,8 @@ const memoizedValue = useMemo(() => computeExpensiveValue(a, b), [a, b]);
 
 {% highlight javascript linenos%}
 function Counter() {
-    const [count, setCount] = React.useState(0)
-    const doubleCount = count * 2
+const [count, setCount] = React.useState(0)
+const doubleCount = count \* 2
 
     return (
         <div>
@@ -54,6 +54,7 @@ function Counter() {
             <button onClick={() => setCount(count)}>Double Counter: {count}</button>
         </div>
     )
+
 }
 {% endhighlight %}
 
@@ -65,8 +66,8 @@ function Counter() {
 
 {% highlight javascript linenos%}
 function Counter() {
-    const [count, setCount] = React.useState(0)
-    const doubleCount = React.useMemo(() => counter * 2, [count])
+const [count, setCount] = React.useState(0)
+const doubleCount = React.useMemo(() => counter \* 2, [count])
 
     return (
         <div>
@@ -74,6 +75,7 @@ function Counter() {
             <button onClick={() => setCount(count)}>Double Counter: {count}</button>
         </div>
     )
+
 }
 {% endhighlight %}
 
