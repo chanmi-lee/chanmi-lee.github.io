@@ -1,0 +1,282 @@
+<!DOCTYPE html> <html lang="en"> <head> <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <meta charset="utf-8"> <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> <meta http-equiv="X-UA-Compatible" content="IE=edge"> <title> Hooks in React | Chanmi Lee </title> <meta name="author" content="Chanmi Kate Lee"> <meta name="description" content="A simple, whitespace theme for academics. Based on [*folio](https://github.com/bogoli/-folio) design. "> <meta name="keywords" content="jekyll, jekyll-theme, academic-website, portfolio-website"> <link rel="stylesheet" href="/assets/css/bootstrap.min.css?a4b3f509e79c54a512b890d73235ef04"> <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.20.0/css/mdb.min.css" integrity="sha256-jpjYvU3G3N6nrrBwXJoVEYI/0zw8htfFnhT9ljN3JJw=" crossorigin="anonymous"> <link defer rel="stylesheet" href="/assets/css/academicons.min.css?f0b7046b84e425c55f3463ac249818f5"> <link defer rel="stylesheet" href="/assets/css/scholar-icons.css?62b2ac103a88034e6882a5be5f3e2772"> <link defer rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons&amp;display=swap"> <link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-github.css?591dab5a4e56573bf4ef7fd332894c99" media="" id="highlight_theme_light"> <link defer href="/assets/css/bootstrap-toc.min.css?6f5af0bb9aab25d79b2448143cbeaa88" rel="stylesheet"> <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%E2%9A%9B%EF%B8%8F&lt;/text&gt;&lt;/svg&gt;"> <link rel="stylesheet" href="/assets/css/main.css?d41d8cd98f00b204e9800998ecf8427e"> <link rel="canonical" href="https://chanmi-lee.github.io/articles/2020-07/Hooks-of-React/"> <script src="/assets/js/theme.js?a81d82887dd692e91686b43de4542f18"></script> <link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-native.css?5847e5ed4a4568527aa6cfab446049ca" media="none" id="highlight_theme_dark"> <script>
+    initTheme();
+  </script> </head> <body class="fixed-top-nav "> <header> <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top" role="navigation"> <div class="container"> <a class="navbar-brand title font-weight-lighter" href="/"> Chanmi Lee </a> <button class="navbar-toggler collapsed ml-auto" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar top-bar"></span> <span class="icon-bar middle-bar"></span> <span class="icon-bar bottom-bar"></span> </button> <div class="collapse navbar-collapse text-right" id="navbarNav"> <ul class="navbar-nav ml-auto flex-nowrap"> <li class="nav-item "> <a class="nav-link" href="/">about </a> </li> <li class="nav-item "> <a class="nav-link" href="/blog/">blog </a> </li> <li class="nav-item"> <button id="search-toggle" title="Search" onclick="openSearchModal()"> <span class="nav-link">ctrl k <i class="ti ti-search"></i></span> </button> </li> <li class="toggle-container"> <button id="light-toggle" title="Change theme"> <i class="ti ti-sun-moon" id="light-toggle-system"></i> <i class="ti ti-moon-filled" id="light-toggle-dark"></i> <i class="ti ti-sun-filled" id="light-toggle-light"></i> </button> </li> </ul> </div> </div> </nav> <progress id="progress" value="0"> <div class="progress-container"> <span class="progress-bar"></span> </div> </progress> </header> <div class="container mt-5" role="main"> <div class="row"> <div class="col-sm-3"> <nav id="toc-sidebar" class="sticky-top"></nav> </div> <div class="col-sm-9"> <div class="post"> <header class="post-header"> <h1 class="post-title">Hooks in React</h1> <p class="post-meta"> Created on July 19, 2020 </p> <p class="post-tags"> <i class="fa-solid fa-calendar fa-sm"></i> 2020   ·   <i class="fa-solid fa-tag fa-sm"></i> React   <i class="fa-solid fa-tag fa-sm"></i> hooks </p> </header> <article class="post-content"> <div id="markdown-content"> <h3 id="hooks-개요">Hooks 개요</h3> <p>Hooks은 <strong>리액트 16.8</strong> 부터 새롭게 추가된 내용입니다. Hooks을 사용하면 클래스를 작성하지 않고도 state 및 다른 리액트 기능들을 사용할 수 있습니다.</p> <p>Hooks은 이전 리액트 버전과 호환됩니다. 아래 내용이 다소 빠르다고 느끼거나 리액트에 친숙하지 않다면, 아래 페이지를 참고해주세요:</p> <blockquote> <p>왜 리액트는 Hooks을 새롭게 추가하였을까? (<a href="https://reactjs.org/docs/hooks-intro.html#motivation" rel="external nofollow noopener" target="_blank">Link</a>)</p> </blockquote> <h3 id="-state-hook">📌 State Hook</h3> <p>아래 예제는 카운터를 렌더링합니다. 버튼을 클릭하면, 값이 증가합니다:</p> <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><table class="rouge-table"><tbody><tr>
+<td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+</pre></td> <td class="code"><pre><span class="k">import</span> <span class="nx">React</span><span class="p">,</span> <span class="p">{</span> <span class="nx">useState</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">react</span><span class="dl">'</span>
+
+<span class="kd">function</span> <span class="nf">Example</span><span class="p">()</span> <span class="p">{</span>
+<span class="c1">// count라는 이름의 state 변수를 선언합니다.</span>
+<span class="kd">const</span> <span class="p">[</span><span class="nx">count</span><span class="p">,</span> <span class="nx">setCount</span><span class="p">]</span> <span class="o">=</span> <span class="nf">useState</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="k">return </span><span class="p">(</span>
+
+<span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="nx">You</span> <span class="nx">clicked</span> <span class="p">{</span><span class="nx">count</span><span class="p">}</span> <span class="nx">times</span><span class="o">&lt;</span><span class="sr">/p</span><span class="err">&gt;
+</span><span class="o">&lt;</span><span class="nx">button</span> <span class="nx">onClick</span><span class="o">=</span><span class="p">{()</span> <span class="o">=&gt;</span> <span class="nf">setCount</span><span class="p">(</span><span class="nx">count</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)}</span><span class="o">&gt;</span>
+<span class="nx">Click</span> <span class="nx">me</span>
+<span class="o">&lt;</span><span class="sr">/button</span><span class="err">&gt;
+</span><span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></td> </tr></tbody></table></code></pre></figure> <p>여기서 <code class="language-plaintext highlighter-rouge">useState</code>가 Hook입니다. 함수 컴포넌트 내에서 이를 호출하여 로컬 상태를 추가합니다. 리액트가 컴포넌트를 다시 랜더링하는 동안에도 이 state는 그대로 보존됩니다. <code class="language-plaintext highlighter-rouge">useState</code>는 현재 state 값과 이를 업데이트 할 수 있는 함수 쌍을 반환합니다. 이벤트 핸들러나 혹은 어디서든 이 함수를 호출 할 수 있습니다.</p> <p>이는 클래스에서의 <code class="language-plaintext highlighter-rouge">this.setState</code>와 비슷하지만, 이전 state와 새로운 state를 병합하지 않는다는 점에 차이가 있습니다. (<a href="https://reactjs.org/docs/hooks-state.html" rel="external nofollow noopener" target="_blank">Hooks state</a> 에서 <code class="language-plaintext highlighter-rouge">useState</code>와 <code class="language-plaintext highlighter-rouge">this.state</code>를 비교하는 예제를 확인하실 수 있습니다.)</p> <p><code class="language-plaintext highlighter-rouge">useState</code>의 유일한 인수는 initial state입니다. 위의 예제를 살펴보면, 카운터는 0부터 시작하기 때문에 initial state 값은 0입니다. <code class="language-plaintext highlighter-rouge">this.state</code>와 달리, state는 객체일 필요는 없습니다. initial state argument는 초기 렌더링에만 사용됩니다.</p> <h3 id="다수의-state-변수-선언하기">다수의 state 변수 선언하기</h3> <p>한 컴포넌트에서 State Hook를 여러 번 사용할 수도 있습니다.</p> <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><table class="rouge-table"><tbody><tr>
+<td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td> <td class="code"><pre><span class="kd">function</span> <span class="nf">ExampleWithManyStates</span><span class="p">()</span> <span class="p">{</span>
+<span class="c1">// Declare multiple state variables!</span>
+<span class="kd">const</span> <span class="p">[</span><span class="nx">age</span><span class="p">,</span> <span class="nx">setAge</span><span class="p">]</span> <span class="o">=</span> <span class="nf">useState</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+<span class="kd">const</span> <span class="p">[</span><span class="nx">fruit</span><span class="p">,</span> <span class="nx">setFruit</span><span class="p">]</span> <span class="o">=</span> <span class="nf">useState</span><span class="p">(</span><span class="dl">'</span><span class="s1">banana</span><span class="dl">'</span><span class="p">)</span>
+<span class="kd">const</span> <span class="p">[</span><span class="nx">todos</span><span class="p">,</span> <span class="nx">setTodos</span><span class="p">]</span> <span class="o">=</span> <span class="nf">useState</span><span class="p">([{</span> <span class="na">text</span><span class="p">:</span> <span class="dl">'</span><span class="s1">Learn Hooks</span><span class="dl">'</span> <span class="p">}])</span>
+<span class="c1">// ...</span>
+<span class="p">}</span>
+</pre></td> </tr></tbody></table></code></pre></figure> <p>배열 디컨스트러링을 통해 useState를 사용하여 state 변수에 다른 이름을 사용할 수 있습니다. 이 이름들은 useState API의 일부는 아닙니다만, 리액트는 useState가 여러번 호출되면, 모든 랜더링 중에 동일한 순서로 수행한다고 가정하게 됩니다. 이와 같이 작동하는 이유와 언제 이것이 유용한지는 추후에 살펴보겠습니다.</p> <h3 id="hook의-정의와-용도">Hook의 정의와 용도</h3> <p><strong>Hooks은 함수로 리액트 state와 함수 컴포넌트의 라이프사이클 기능을 연결합니다.</strong> Hooks은 클래스 내에서는 동작하지 않습니다. (기존 클래스 컴포넌트를 다시 작성하는 것은 추천하지 않지만 원하는 경우 새로운 컴포넌트에서 Hook을 사용할 수 있습니다.)</p> <p>리액트는 useState처럼 몇가지의 <strong>내장 Hooks을 제공</strong> 합니다. 또한 서로 다른 컴포넌트간의 stateful behavior을 재사용하기위한 자체 Hooks (또는 custom Hooks) 을 생성할 수도 있습니다. 먼저 내장 Hooks을 살펴보겠습니다.</p> <h3 id="️-effect-hook">⚡️ Effect Hook</h3> <p>데이터 가져오기, 구독, 또는 리액트 컴포넌트로부터 DOM을 변경한 적이 있나요? 이러한 작업은 다른 컴포넌트에 영향을 끼칠 수도 있고 렌더링하는 동안 수행할 수 없기 때문에 <code class="language-plaintext highlighter-rouge">연쇄 작용 (또는 효과 - 원문에는 side effect)</code>라고 합니다.</p> <p><code class="language-plaintext highlighter-rouge">useEffect</code>은 함수 컴포넌트로부터 이러한 부작용을 수행하는 기능을 추가합니다. <code class="language-plaintext highlighter-rouge">useEffect</code>는 리액트 클래스의 <code class="language-plaintext highlighter-rouge">componentDidMount</code>, <code class="language-plaintext highlighter-rouge">componentDidUpdate</code>, <code class="language-plaintext highlighter-rouge">componentWillUnmount</code>와 동일한 용도로 사용되지만 하나의 API로 통합되었습니다. 몇 가지 예제를 통해 <code class="language-plaintext highlighter-rouge">useEffect</code>와 라이프사이클 메소드를 비교해보겠습니다.</p> <p>예를 들어, 이 컴포넌트는 리액트가 DOM을 업데이트 한 뒤에 문서의 제목을 지정합니다:</p> <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><table class="rouge-table"><tbody><tr>
+<td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+</pre></td> <td class="code"><pre><span class="k">import</span> <span class="nx">React</span><span class="p">,</span> <span class="p">{</span> <span class="nx">useState</span><span class="p">,</span> <span class="nx">useEffect</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">react</span><span class="dl">'</span>
+
+<span class="kd">function</span> <span class="nf">Example</span><span class="p">()</span> <span class="p">{</span>
+<span class="kd">const</span> <span class="p">[</span><span class="nx">count</span><span class="p">,</span> <span class="nx">setCount</span><span class="p">]</span> <span class="o">=</span> <span class="nf">useState</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1">// componentDidMount, componentDidUpdate와 유사:</span>
+<span class="nf">useEffect</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+<span class="c1">// browser API 를 사용하여 문서 제목을 업데이트</span>
+<span class="nb">document</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s2">`You clicked </span><span class="p">${</span><span class="nx">count</span><span class="p">}</span><span class="s2"> times`</span>
+<span class="p">})</span>
+
+<span class="k">return </span><span class="p">(</span>
+
+<span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="nx">You</span> <span class="nx">clicked</span> <span class="p">{</span><span class="nx">count</span><span class="p">}</span> <span class="nx">times</span><span class="o">&lt;</span><span class="sr">/p</span><span class="err">&gt;
+</span><span class="o">&lt;</span><span class="nx">button</span> <span class="nx">onClick</span><span class="o">=</span><span class="p">{()</span> <span class="o">=&gt;</span> <span class="nf">setCount</span><span class="p">(</span><span class="nx">count</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)}</span><span class="o">&gt;</span>
+<span class="nx">Click</span> <span class="nx">me</span>
+<span class="o">&lt;</span><span class="sr">/button</span><span class="err">&gt;
+</span><span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></td> </tr></tbody></table></code></pre></figure> <p><code class="language-plaintext highlighter-rouge">useEffect</code>를 호출하면, DOM의 변경된 부분을 비운 뒤 effect 함수를 실행합니다. effect는 컴포넌트 내부에 선언되며 따라서 컴포넌트의 props와 state에 접근할 수 있습니다. 기본적으로, 첫 번째 랜더링을 포함하여 매번 랜더링 한 뒤에 effect가 실행됩니다. (<a href="https://reactjs.org/docs/hooks-effect.html" rel="external nofollow noopener" target="_blank">Using the Effect Hook</a>에서 클래스 라이프사이클과 조금 더 자세히 비교해봅니다.)</p> <p>Effects는 또한 함수를 ‘정리’하여 반환하는 방법이기도 합니다. 예를 들어, 이 컴포넌트를 사용하여 친구의 온라인 상태를 구독하거나 구독을 취소하며 정리합니다.</p> <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><table class="rouge-table"><tbody><tr>
+<td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+</pre></td> <td class="code"><pre><span class="k">import</span> <span class="nx">React</span><span class="p">,</span> <span class="p">{</span> <span class="nx">useState</span><span class="p">,</span> <span class="nx">useEffect</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">react</span><span class="dl">'</span>
+
+<span class="kd">function</span> <span class="nf">FriendStatus</span><span class="p">(</span><span class="nx">props</span><span class="p">)</span> <span class="p">{</span>
+<span class="kd">const</span> <span class="p">[</span><span class="nx">isOnline</span><span class="p">,</span> <span class="nx">setIsOnline</span><span class="p">]</span> <span class="o">=</span> <span class="nf">useState</span><span class="p">(</span><span class="kc">null</span><span class="p">)</span>
+
+<span class="kd">function</span> <span class="nf">handleStatusChange</span><span class="p">(</span><span class="nx">status</span><span class="p">)</span> <span class="p">{</span>
+<span class="nf">setIsOnline</span><span class="p">(</span><span class="nx">status</span><span class="p">.</span><span class="nx">isOnline</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="nf">useEffect</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+<span class="nx">ChatAPI</span><span class="p">.</span><span class="nf">subscribeToFriendStatus</span><span class="p">(</span><span class="nx">props</span><span class="p">.</span><span class="nx">friend</span><span class="p">.</span><span class="nx">id</span><span class="p">,</span> <span class="nx">handleStatusChange</span><span class="p">)</span>
+<span class="k">return </span><span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+<span class="nx">ChatAPI</span><span class="p">.</span><span class="nf">unsubscribeFromFriendStatus</span><span class="p">(</span><span class="nx">props</span><span class="p">.</span><span class="nx">friend</span><span class="p">.</span><span class="nx">id</span><span class="p">,</span> <span class="nx">handleStatusChange</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="p">})</span>
+
+<span class="k">if </span><span class="p">(</span><span class="nx">isOnline</span> <span class="o">===</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
+<span class="k">return</span> <span class="dl">'</span><span class="s1">Loading...</span><span class="dl">'</span>
+<span class="p">}</span>
+<span class="k">return</span> <span class="nx">isOnline</span> <span class="p">?</span> <span class="dl">'</span><span class="s1">Online</span><span class="dl">'</span> <span class="p">:</span> <span class="dl">'</span><span class="s1">Offline</span><span class="dl">'</span>
+<span class="p">}</span>
+</pre></td> </tr></tbody></table></code></pre></figure> <p>이 예제에서, 리액트는 컴포넌트가 언마운트 될 때와 렌더링으로 인해 효과가 다시 실행되기 전에, Chat API을 통해 구독을 취소합니다. (원한다면, ChatAPI에 전달한 <code class="language-plaintext highlighter-rouge">props.friend.id</code>가 변하지 않은 경우 재구독을 건너뛰게 하는 방법도 있습니다.)</p> <p><code class="language-plaintext highlighter-rouge">useState</code>처럼, 컴포넌트에서 하나 이상의 effect를 사용할 수 있습니다.</p> <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><table class="rouge-table"><tbody><tr>
+<td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+</pre></td> <td class="code"><pre><span class="kd">function</span> <span class="nf">FriendStatusWithCounter</span><span class="p">(</span><span class="nx">props</span><span class="p">)</span> <span class="p">{</span>
+<span class="kd">const</span> <span class="p">[</span><span class="nx">count</span><span class="p">,</span> <span class="nx">setCount</span><span class="p">]</span> <span class="o">=</span> <span class="nf">useState</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="nf">useEffect</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+<span class="nb">document</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="s2">`You clicked </span><span class="p">${</span><span class="nx">count</span><span class="p">}</span><span class="s2"> times`</span>
+<span class="p">})</span>
+
+<span class="kd">const</span> <span class="p">[</span><span class="nx">isOnline</span><span class="p">,</span> <span class="nx">setIsOnline</span><span class="p">]</span> <span class="o">=</span> <span class="nf">useState</span><span class="p">(</span><span class="kc">null</span><span class="p">)</span>
+<span class="nf">useEffect</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+<span class="nx">ChatAPI</span><span class="p">.</span><span class="nf">subscribeToFriendStatus</span><span class="p">(</span><span class="nx">props</span><span class="p">.</span><span class="nx">friend</span><span class="p">.</span><span class="nx">id</span><span class="p">,</span> <span class="nx">handleStatusChange</span><span class="p">)</span>
+<span class="k">return </span><span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+<span class="nx">ChatAPI</span><span class="p">.</span><span class="nf">unsubscribeFromFriendStatus</span><span class="p">(</span><span class="nx">props</span><span class="p">.</span><span class="nx">friend</span><span class="p">.</span><span class="nx">id</span><span class="p">,</span> <span class="nx">handleStatusChange</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="p">})</span>
+
+<span class="kd">function</span> <span class="nf">handleStatusChange</span><span class="p">(</span><span class="nx">status</span><span class="p">)</span> <span class="p">{</span>
+<span class="nf">setIsOnline</span><span class="p">(</span><span class="nx">status</span><span class="p">.</span><span class="nx">isOnline</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="c1">// ...</span>
+<span class="p">}</span>
+</pre></td> </tr></tbody></table></code></pre></figure> <p>Hooks을 사용하면 라이프사이클 메소드에 기반한 분할을 강요하지 않고, 관련된 부분 (예: 구독 추가 및 제거)에 따라 컴포넌트의 side effects을 구성할 수 있습니다.</p> <h4 id="hooks의-법칙들">Hooks의 법칙들</h4> <p>Hooks는 자바스크립트 함수지만, 두 가지 추가적인 법칙을 따릅니다.</p> <ul> <li>Hooks는 <strong>최상위 레벨에서만 호출</strong>합니다. 루프나, 조건문 또는 중첩 함수 내에서 사용하지 않습니다.</li> <li>Hooks는 <strong>리액트 함수 컴포넌트에서만 호출</strong>합니다. 일반적인 자바스크립트 함수에서 사용하지 않습니다. (단, Custom Hooks은 예외로 하며 이에 대해선 이어서 살펴봅니다.)</li> </ul> <p>이 법칙을 자동으로 강제하기 위해 <a href="https://www.npmjs.com/package/eslint-plugin-react-hooks" rel="external nofollow noopener" target="_blank"><code class="language-plaintext highlighter-rouge">linter plugin</code></a> 을 제공합니다. 처음에는 이 법칙들이 제한적이거나 혼란스럽게 느껴질 수 있지만, 이는 Hooks이 잘 동작하도록 하는데 필수입니다.</p> <blockquote> <p>좀 더 자세한 설명은 <a href="https://reactjs.org/docs/hooks-rules.html" rel="external nofollow noopener" target="_blank">Rules of Hooks</a> 에서 확인할 수 있습니다.</p> </blockquote> <h4 id="custom-hooks-만들기">Custom Hooks 만들기</h4> <p>때로는 컴포넌트 간에 상태 저장 로직을 재사용하고 싶을 때도 있을 것입니다. 일반적으로, 이런 경우 다음의 두 가지 방법이 사용됩니다: <a href="https://reactjs.org/docs/higher-order-components.html" rel="external nofollow noopener" target="_blank"><code class="language-plaintext highlighter-rouge">higher-order components</code></a> 와 <a href="https://reactjs.org/docs/render-props.html" rel="external nofollow noopener" target="_blank"><code class="language-plaintext highlighter-rouge">render props</code></a> Custom Hooks을 사용하면, 더 많은 컴포넌트를 트리에 추가하지 않고도 이 작업을 수행할 수 있습니다.</p> <p>초반에, <code class="language-plaintext highlighter-rouge">FriendStatus</code> 컴포넌트를 소개하며 친구들의 온라인 상태를 구독하는 <code class="language-plaintext highlighter-rouge">useState</code>와 <code class="language-plaintext highlighter-rouge">useEffect</code> Hooks을 호출하는 방법을 살펴보았습니다. 이 로직을 다른 컴포넌트에서 재사용하려면 어떻게 해야할까요?</p> <p>먼저, 이 로직을 <code class="language-plaintext highlighter-rouge">useFriendStatus</code>라는 Custom Hooks으로 분리합니다.</p> <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><table class="rouge-table"><tbody><tr>
+<td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+</pre></td> <td class="code"><pre><span class="k">import</span> <span class="nx">React</span><span class="p">,</span> <span class="p">{</span> <span class="nx">useState</span><span class="p">,</span> <span class="nx">useEffect</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">react</span><span class="dl">'</span>
+
+<span class="kd">function</span> <span class="nf">useFriendStatus</span><span class="p">(</span><span class="nx">friendID</span><span class="p">)</span> <span class="p">{</span>
+<span class="kd">const</span> <span class="p">[</span><span class="nx">isOnline</span><span class="p">,</span> <span class="nx">setIsOnline</span><span class="p">]</span> <span class="o">=</span> <span class="nf">useState</span><span class="p">(</span><span class="kc">null</span><span class="p">)</span>
+
+<span class="kd">function</span> <span class="nf">handleStatusChange</span><span class="p">(</span><span class="nx">status</span><span class="p">)</span> <span class="p">{</span>
+<span class="nf">setIsOnline</span><span class="p">(</span><span class="nx">status</span><span class="p">.</span><span class="nx">isOnline</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="nf">useEffect</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+<span class="nx">ChatAPI</span><span class="p">.</span><span class="nf">subscribeToFriendStatus</span><span class="p">(</span><span class="nx">friendID</span><span class="p">,</span> <span class="nx">handleStatusChange</span><span class="p">)</span>
+<span class="k">return </span><span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+<span class="nx">ChatAPI</span><span class="p">.</span><span class="nf">unsubscribeFromFriendStatus</span><span class="p">(</span><span class="nx">friendID</span><span class="p">,</span> <span class="nx">handleStatusChange</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="p">})</span>
+
+<span class="k">return</span> <span class="nx">isOnline</span>
+<span class="p">}</span>
+</pre></td> </tr></tbody></table></code></pre></figure> <p><code class="language-plaintext highlighter-rouge">useFriendStatus</code>는 <code class="language-plaintext highlighter-rouge">friendID</code>를 인수로 받아, 친구의 온라인 여부를 반환해줍니다. 이를 아래의 컴포넌트들에서 사용할 수도 있습니다.</p> <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><table class="rouge-table"><tbody><tr>
+<td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td> <td class="code"><pre><span class="kd">function</span> <span class="nf">FriendStatus</span><span class="p">(</span><span class="nx">props</span><span class="p">)</span> <span class="p">{</span>
+<span class="kd">const</span> <span class="nx">isOnline</span> <span class="o">=</span> <span class="nf">useFriendStatus</span><span class="p">(</span><span class="nx">props</span><span class="p">.</span><span class="nx">friend</span><span class="p">.</span><span class="nx">id</span><span class="p">)</span>
+
+<span class="k">if </span><span class="p">(</span><span class="nx">isOnline</span> <span class="o">===</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
+<span class="k">return</span> <span class="dl">'</span><span class="s1">Loading...</span><span class="dl">'</span>
+<span class="p">}</span>
+<span class="k">return</span> <span class="nx">isOnline</span> <span class="p">?</span> <span class="dl">'</span><span class="s1">Online</span><span class="dl">'</span> <span class="p">:</span> <span class="dl">'</span><span class="s1">Offline</span><span class="dl">'</span>
+<span class="p">}</span>
+</pre></td> </tr></tbody></table></code></pre></figure> <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><table class="rouge-table"><tbody><tr>
+<td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td> <td class="code"><pre><span class="kd">function</span> <span class="nf">FriendListItem</span><span class="p">(</span><span class="nx">props</span><span class="p">)</span> <span class="p">{</span>
+<span class="kd">const</span> <span class="nx">isOnline</span> <span class="o">=</span> <span class="nf">useFriendStatus</span><span class="p">(</span><span class="nx">props</span><span class="p">.</span><span class="nx">friend</span><span class="p">.</span><span class="nx">id</span><span class="p">)</span>
+
+<span class="k">return </span><span class="p">(</span>
+
+<span class="o">&lt;</span><span class="nx">li</span> <span class="nx">style</span><span class="o">=</span><span class="p">{{</span> <span class="na">color</span><span class="p">:</span> <span class="nx">isOnline</span> <span class="p">?</span> <span class="dl">'</span><span class="s1">green</span><span class="dl">'</span> <span class="p">:</span> <span class="dl">'</span><span class="s1">black</span><span class="dl">'</span> <span class="p">}}</span><span class="o">&gt;</span>
+<span class="p">{</span><span class="nx">props</span><span class="p">.</span><span class="nx">friend</span><span class="p">.</span><span class="nx">name</span><span class="p">}</span>
+<span class="o">&lt;</span><span class="sr">/li</span><span class="err">&gt;
+</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></td> </tr></tbody></table></code></pre></figure> <p>이 컴포넌트들의 state는 완전히 독립적입니다. Hooks는 상태 저장 로직을 재사용하는 하나의 방법일 뿐, state 그 자체는 아닙니다. 사실, 각각의 Hooks 호출은 완전히 별개의 state를 가지므로 하나의 컴포넌트에서 같은 custom Hooks을 두 번 사용할 수도 있습니다.</p> <p><strong>Custom Hooks은 하나의 기능이라기 보다 규칙에 좀 더 가깝습니다.</strong> 만약 함수의 이름이 <code class="language-plaintext highlighter-rouge">use</code>로 시작하고 다른 Hooks을 호출한다면, 우리는 이를 custom Hook이라 합니다. <code class="language-plaintext highlighter-rouge">useSomething</code> 이름 규칙은 linter plugin이 Hooks를 사용하여 코드에서 버그를 찾는 방법입니다.</p> <p>폼 핸들링, 애니메이션, 선언적 구독, 타이머 및 그 외 좀 더 광범위한 사용 사례를 포함하는 custom Hooks을 작성할 수도 있습니다. 리액트 커뮤니티가 어떤 custom Hooks을 만들어낼 지 기대됩니다.</p> <blockquote> <p><a href="https://reactjs.org/docs/hooks-custom.html" rel="external nofollow noopener" target="_blank">Building Your Own Hooks</a> 에서 custom Hooks에 대해 좀 더 자세히 알아볼 수 있습니다.</p> </blockquote> <h4 id="내장-hooks-사례들">내장 Hooks 사례들</h4> <p>일반적으로 사용되진 않지만, 유용한 내장 Hooks들도 있습니다. 예를 들어, <code class="language-plaintext highlighter-rouge">useContext</code>를 사용하면 중첩 없이도 React 컨텍스트를 구독할 수 있습니다.</p> <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><table class="rouge-table"><tbody><tr>
+<td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td> <td class="code"><pre><span class="kd">function</span> <span class="nf">Example</span><span class="p">()</span> <span class="p">{</span>
+<span class="kd">const</span> <span class="nx">locale</span> <span class="o">=</span> <span class="nf">useContext</span><span class="p">(</span><span class="nx">LocaleContext</span><span class="p">)</span>
+<span class="kd">const</span> <span class="nx">theme</span> <span class="o">=</span> <span class="nf">useContext</span><span class="p">(</span><span class="nx">ThemeContext</span><span class="p">)</span>
+<span class="c1">// ...</span>
+<span class="p">}</span>
+</pre></td> </tr></tbody></table></code></pre></figure> <p>또한, <code class="language-plaintext highlighter-rouge">useRender</code>를 사용하면 복잡한 컴포넌트의 로컬 state를 관리할 수 있습니다.</p> <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><table class="rouge-table"><tbody><tr>
+<td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td> <td class="code"><pre><span class="kd">function</span> <span class="nf">Todos</span><span class="p">()</span> <span class="p">{</span>
+<span class="kd">const</span> <span class="p">[</span><span class="nx">todos</span><span class="p">,</span> <span class="nx">dispatch</span><span class="p">]</span> <span class="o">=</span> <span class="nf">useReducer</span><span class="p">(</span><span class="nx">todosReducer</span><span class="p">)</span>
+<span class="c1">// ...</span>
+<span class="p">}</span>
+</pre></td> </tr></tbody></table></code></pre></figure> <blockquote> <p><a href="https://reactjs.org/docs/hooks-reference.html" rel="external nofollow noopener" target="_blank">Hooks API Reference</a> 에서 내장 Hooks에 대한 자세한 내용을 확인 할 수 있습니다.</p> </blockquote> <hr> <p>🔗 참조</p> <p>📌 <a href="https://reactjs.org/docs/hooks-overview.html" rel="external nofollow noopener" target="_blank">Hook overview :: React Official Docs</a></p> </div> </article> <br> <hr> <br> <ul class="list-disc pl-8"></ul> <h2 class="text-3xl font-semibold mb-4 mt-12">Enjoy Reading This Article?</h2> <p class="mb-2">Here are some more articles you might like to read next:</p> <li class="my-2"> <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/articles/2022-04/cookie-session-webstorage/">cookie vs session vs webStorage</a> </li> <li class="my-2"> <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/articles/2021-08/react-controlled-uncontrolled-component/">[React] Controlled vs Uncontrolled Component</a> </li> <li class="my-2"> <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/articles/2021-07/review-of-learning-react/">[리뷰] "Learning React"를 읽고</a> </li> <li class="my-2"> <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/articles/2021-03/Pure-JavaScript-Functions-as-a-Replacement-for-Lodash/">[번역] Lodash를 대체하는 순수 자바스크립트 함수</a> </li> <li class="my-2"> <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/articles/2021-02/review-of-container-security/">[리뷰] "컨테이너 보안"을 읽고</a> </li> <div id="disqus_thread" style="max-width: 930px; margin: 0 auto;"> <script type="text/javascript">
+    var disqus_shortname  = 'chanmi-lee';
+    var disqus_identifier = '/articles/2020-07/Hooks-of-React';
+    var disqus_title      = "Hooks in React";
+    (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script> <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript" rel="external nofollow noopener" target="_blank">comments powered by Disqus.</a> </noscript> </div> </div> </div> </div> </div> <footer class="fixed-bottom" role="contentinfo"> <div class="container mt-0"> © Copyright 2025 Chanmi Kate Lee. Powered by <a href="https://jekyllrb.com/" target="_blank" rel="external nofollow noopener">Jekyll</a>. </div> </footer> <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script> <script src="/assets/js/bootstrap.bundle.min.js"></script> <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.20.0/js/mdb.min.js" integrity="sha256-NdbiivsvWt7VYCt6hYNT3h/th9vSTL4EDWeGs5SN3DA=" crossorigin="anonymous"></script> <script defer src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha256-Nn1q/fx0H7SNLZMQ5Hw5JLaTRZp0yILA/FRexe19VdI=" crossorigin="anonymous"></script> <script defer src="https://cdn.jsdelivr.net/npm/imagesloaded@5.0.0/imagesloaded.pkgd.min.js" integrity="sha256-htrLFfZJ6v5udOG+3kNLINIKh2gvoKqwEhHYfTTMICc=" crossorigin="anonymous"></script> <script defer src="/assets/js/masonry.js?a0db7e5d5c70cc3252b3138b0c91dcaf" type="text/javascript"></script> <script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script> <script defer src="/assets/js/zoom.js?85ddb88934d28b74e78031fd54cf8308"></script> <script defer src="/assets/js/bootstrap-toc.min.js?c82ff4de8b0955d6ff14f5b05eed7eb6"></script> <script src="/assets/js/no_defer.js?2781658a0a2b13ed609542042a859126"></script> <script defer src="/assets/js/common.js?c15de51d4bb57887caa2c21988d97279"></script> <script defer src="/assets/js/copy_code.js?c8a01c11a92744d44b093fc3bda915df" type="text/javascript"></script> <script defer src="/assets/js/jupyter_new_tab.js?d9f17b6adc2311cbabd747f4538bb15f"></script> <script async src="https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js"></script> <script async src="https://badge.dimensions.ai/badge.js"></script> <script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI=" crossorigin="anonymous"></script> <script src="/assets/js/mathjax-setup.js?a5bb4e6a542c546dd929b24b8b236dfd"></script> <script defer src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6" crossorigin="anonymous"></script> <script defer src="/assets/js/progress-bar.js?2f30e0e6801ea8f5036fa66e1ab0a71a" type="text/javascript"></script> <script src="/assets/js/vanilla-back-to-top.min.js?f40d453793ff4f64e238e420181a1d17"></script> <script>
+    addBackToTop();
+  </script> <script type="module" src="/assets/js/search/ninja-keys.min.js?a3446f084dcaecc5f75aa1757d087dcf"></script> <ninja-keys hidebreadcrumbs noautoloadmdicons placeholder="Type to start searching"></ninja-keys> <script src="/assets/js/search-setup.js?6c304f7b1992d4b60f7a07956e52f04a"></script> <script src="/assets/js/search-data.js"></script> <script src="/assets/js/shortcut-key.js?6f508d74becd347268a7f822bca7309d"></script> </body> </html>
