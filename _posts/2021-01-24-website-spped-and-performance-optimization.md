@@ -4,13 +4,14 @@ title: "웹 성능 분석 및 최적화 기법 (with Chrome Developer Tools)"
 date: 2021-01-24
 categories: [WebPerformance, Optimize, DeveloperTools, WebVitals]
 disqus_comments: true
+typograms: true
 toc:
   sidebar: left
 ---
 
 {% include figure.liquid loading="eager" path="/assets/img/posts/web-performance.png" class="img-fluid rounded z-depth-1" %}
 
-### 웹 성능 분석 및 최적화 기법 (with Chrome Developer Tools)
+## 웹 성능 분석 및 최적화 기법 (with Chrome Developer Tools)
 
 웹의 성능 최적화 방법은 크게 로딩 성능과 렌더링 성능을 최적화하는 방법으로 나누어 생각할 수 있습니다.
 
@@ -20,7 +21,9 @@ toc:
 다양한 성능 최적화 방법이 있지만,
 그 중에서도 크롬 개발자도구를 활용하여 웹 사이트의 로딩 성능과 렌더링 성능과 관련된 지표들을 살펴보고 이를 통해 어떻게 성능을 개선할 수 있는지 살펴보겠습니다.
 
-#### Lighthouse(Audit)로 분석하기
+---
+
+### Lighthouse(Audit)로 분석하기
 
 먼저 분석하고자 하는 사이트에 들어가 개발자 도구의 `Lighthouse` 패널을 열고 `Generate report`를 누르면, 아래와 같이 분석 결과를 확인할 수 있습니다.
 
@@ -58,7 +61,9 @@ toc:
 
 {% include figure.liquid loading="eager" path="/assets/img/posts/runtime-setting-in-lighthouse.png" class="img-fluid rounded z-depth-1" %}
 
-#### Performance로 분석하기
+---
+
+### Performance로 분석하기
 
 Performance 패널에서는 `Timeline`을 기준으로 페이지가 로드되면서 실행되는 작업들에 관한 정보를 그래프와 화면들의 스냅샷으로 확인할 수 있습니다.
 
@@ -95,7 +100,9 @@ DCL, FP, FCP, LCP, L 등의 순서를 확인할 수 있으며 각각의 의미�
 
 {% include figure.liquid loading="eager" path="/assets/img/posts/main-in-performance.gif" class="img-fluid rounded z-depth-1" %}
 
-#### Network로 분석하기
+---
+
+### Network로 분석하기
 
 `Network`는 `Performance` 패널과 함께 레코딩되며, `웹 페이지가 로딩되는 동안 요청된 리소스 정보들`을 확인할 수 있습니다.
 이 때 리소스 목록은 시간순으로 정렬되며, 아래와 같이 각 리소스의 서버 요청 대기 시간을 확인할 수 있습니다.
@@ -107,24 +114,144 @@ DCL, FP, FCP, LCP, L 등의 순서를 확인할 수 있으며 각각의 의미�
 - Waiting (TTFB) : 초기 응답(Time To First Byte)을 받기까지 소비한 시간, 즉 서버 왕복 시간
 - Content Download : 리소스 다운에 소요된 시간
 
-#### 성능 최적화 방법들
+---
 
-❗ **최대한 적게 요청하고, 최대한 빠르게 받아오기**
+## 성능 최적화 방법들
+
+> ❗ **최대한 적게 요청하고, 최대한 빠르게 받아오기**
 
 앞에서 웹 성능 최적화는 크게 로딩 성능과 렌더링 성능로 분리하여 생각해볼 수 있다고 하였습니다.
 로딩 성능과 렌더링 성능 각각의 관점에서 구체적인 최적화 방안들은 다음과 같습니다.
 
-> 로딩 성능 최적화
+---
 
-- 리소스 최적화
-  - 텍스트 압축
-  - 이미지 사이즈 최적화
-    - 개별 이미지 대신 이미지 스프라이트 사용 ([CSS Image Sprites](https://www.w3schools.com/css/css_image_sprites.asp))
-    - 이미지 CDN을 통한 최적화
-  - 리소스 캐싱 ([MDN : HTTP Caching](https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching))
-  - 이미지 Preload & Lazy load
-  - webpack 등의 번들러를 통한 번들된 리소스 활용
-  - 컴포넌트 Preloading
+### CSS, JS 최적화
+
+- **CSS**는 렌더링 차단 리소스이므로 HTML 문서 최상단(`<head>` 아래)에 배치합니다.
+- **JS**는 파싱과 렌더링을 차단할 수 있으므로 HTML 문서 최하단(`</body>` 직전)에 작성하거나, `<script>` 태그의 `defer`, `async` 속성을 활용하여 비동기적으로 로드합니다.
+
+{% highlight html linenos%}
+
+<head>
+  <link href="style.css" rel="stylesheet" />
+</head>
+<body>
+    <div>...</div>
+    <!-- </body> 직전에 위치시키거나 defer/async 속성 활용 -->
+    <script src="app.js" type="text/javascript" defer></script>
+</body>
+{% endhighlight%}
+
+**Why?**
+
+> 렌더 트리를 구성하기 위해서는 `DOM 트리`와 `CSSOM 트리`가 필요합니다.
+> DOM 트리는 파싱 중 태그를 발견할 때마다 순차적 구성이 가능하나, CSSOM 트리는 CSS를 모두 해석해야 구성이 가능합니다.
+> 때문에 CSS는 렌더링 차단 리소스라고 하며, 렌더링이 되지 않도록 항상 `<head>` 아래에 작성해야 합니다.
+
+또한, 외부 스타일시트를 가져올 때는 `@import`문을 지양해야합니다. `@import`문을 사용하면 브라우저는 스타일시트를 병렬로 다운로드 할 수 없기 때문에 로드 시간이 늘어날 수 있습니다.
+
+{% highlight javascript linenos%}
+/_ test.css _/
+@import url("style.css")
+{% endhighlight %}
+
+내부 스타일시트를 사용할 때에도 `<head>` 태그에 추가하여 사용합니다.
+
+{% highlight javascript linenos%}
+
+<head>
+  <style type="text/css">
+    .container {
+      background-color: black;   
+    }
+  </style>
+</head>
+{% endhighlight %}
+
+### 번들러 (webpack)를 통한 js, css 번들링 최적화
+
+webpack과 같은 모듈 번들러를 사용하면 여러 개의 js, css를 하나의 번들 파일로 묶어 파일 요청 수를 줄일 수 있습니다. 더 나아가 **Code Splitting(코드 분할)** 을 통해 초기 로딩 시 필요한 파일만 로드하게 하거나, **Minification(압축)** 을 통해 파일 크기를 최소화하는 것이 중요합니다.
+
+**Code Splitting**은 번들 파일을 여러 개의 청크(Chunk)로 나누어, 현재 페이지에 필요한 코드만 로드하고 나머지는 나중에 로드하도록 합니다. 이는 초기 로딩 속도를 비약적으로 향상시킬 수 있습니다.
+
+{% highlight javascript linenos%}
+// webpack.config.js 예시
+module.exports = {
+// ...
+optimization: {
+splitChunks: {
+chunks: 'all', // 공통 의존성을 별도 청크로 분리하여 캐싱 효율 증대
+},
+minimize: true, // 프로덕션 모드에서 자동으로 코드 압축 및 난독화 수행
+},
+};
+{% endhighlight %}
+
+### Tree-shaking
+
+외부 라이브러리에서 import를 할 때 모든 함수를 가져오지 않고 필요한 함수만 가져와서 사용할 수 있습니다.
+
+{% highlight javascript linenos%}
+// before
+import \_ from 'lodash';
+
+_.map(...);
+_.filter(...);
+
+// after
+import { map, filter } from 'lodash';
+
+map(...);
+filter(...);
+{% endhighlight %}
+
+### 이미지 사이즈 최적화
+
+개별 이미지 대신 이미지 스프라이트 사용 ([CSS Image Sprites](https://www.w3schools.com/css/css_image_sprites.asp))
+
+여러 개의 이미지를 합쳐 하나의 이미지로 제공하여 한 번 요청하고, 필요한 부분은 CSS의 background-position 속성을 사용하여 보여줍니다.
+
+### 이미지 CDN을 통한 최적화
+
+이미지 CDN(Content Delivery Network)을 사용하면 사용자와 가까운 서버에서 이미지를 서빙하여 로딩 속도를 높일 수 있습니다. 또한, CDN 서비스들은 실시간 이미지 처리(리사이징, 포맷 변환 등) 기능을 제공하여 기기에 최적화된 이미지를 전송하는 데 유용합니다.
+
+- **자동 포맷 변환**: 브라우저 지원 여부에 따라 WebP, AVIF 등 차세대 포맷으로 자동 변환
+- **리사이징 & 크롭**: URL 파라미터로 필요한 크기만큼만 요청하여 전송 데이터 절약
+
+{% highlight html linenos%}
+
+<!-- 원본 이미지 (용량이 큼) -->
+<img src="https://mysite.com/images/hero.jpg" alt="Hero" />
+
+<!-- CDN을 통해 최적화된 이미지 (리사이징 + WebP 변환) -->
+<!-- width=800, quality=auto, format=webp 옵션 적용 예시 -->
+<img src="https://cdn.mysite.com/images/hero.jpg?w=800&q=auto&f=webp" alt="Hero" />
+{% endhighlight %}
+
+### 이미지 Preload & Lazy load
+
+**Preload**는 현재 페이지에서 필요한 리소스(이미지, 스크립트, CSS 등)를 빠르게 로딩하기 위해 브라우저에게 우선순위를 알리는 방법입니다. 주로 LCP(Largest Contentful Paint)에 영향을 주는 메인 이미지나 폰트 파일 등을 미리 로드할 때 사용합니다.
+
+{% highlight html linenos%}
+
+<head>
+  <!-- 이미지 프리로드 예시 -->
+  <link rel="preload" as="image" href="hero-image.jpg">
+</head>
+{% endhighlight %}
+
+**Lazy Load**는 페이지 초기 로딩 시점에 필요하지 않은 리소스(스크롤해야 볼 수 있는 이미지 등)의 로딩을 지연시키는 기술입니다. 사용자가 해당 위치에 도달했을 때 리소스를 로드하여 초기 로딩 속도를 높이고 데이터 소모를 줄일 수 있습니다.
+최신 브라우저에서는 `img` 태그의 `loading` 속성을 통해 간단하게 구현할 수 있습니다.
+
+{% highlight html linenos%}
+
+<!-- 브라우저 네이티브 Lazy Load -->
+<img src="example.jpg" loading="lazy" alt="example" />
+{% endhighlight %}
+
+물론, `Intersection Observer API`를 사용하여 직접 구현하는 방법도 있습니다.
+
+### 컴포넌트 Preloading
 
 {% highlight javascript linenos%}
 import React, { useState, useEffect, Suspense, lazy } from 'react'
@@ -162,40 +289,27 @@ render (
 }
 {% endhighlight %}
 
-> 렌더링 성능 최적화
+### `repaint`, `reflow` 줄이기
 
-- css는 HTML 문서 최상단(`<head>` 아래), script 태그는 HTML 문서 최하단(`</body>` 직전)에 작성
+브라우저는 렌더링 과정에서 레이아웃(Reflow)과 페인트(Repaint) 단계를 거칩니다. DOM이나 스타일이 변경되면 이 과정이 다시 발생하는데, 특히 **Reflow**는 전체 레이아웃을 다시 계산해야 하므로 비용이 큽니다.
 
-{% highlight html linenos%}
+- **Reflow 발생 최소화**: 레이아웃에 영향을 주는 속성(`width`, `height`, `margin` 등) 변경을 최소화합니다.
+- **Repaint만 발생시키는 속성 사용**: 레이아웃 변경 없이 스타일만 바꾸는 `color`, `background-color`, `visibility` 등을 활용합니다.
+- **GPU 가속 활용 (Composite)**: `transform`, `opacity` 속성을 사용하면 Reflow/Repaint 없이 합성(Composite) 단계만 수행하므로 애니메이션 성능이 크게 향상됩니다.
 
-<head>
-  <link href="style.css" rel="stylesheet" />
-</head>
-<body>
-    <div>...</div>
-    <script src="app.js" type="text/javascript"></script>
-</body>
-{% endhighlight%}
+{% highlight css linenos%}
+// Reflow 발생 (비효율적)
+.box {
+left: 10px;
+width: 100px;
+}
 
-**Why?**
-
-> 렌더 트리를 구성하기 위해서는 `DOM 트리`와 `CSSOM 트리`가 필요합니다.
-> DOM 트리는 파싱 중 태그를 발견할 때마다 순차적 구성이 가능하나, CSSOM 트리는 CSS를 모두 해석해야 구성이 가능합니다.
-> 때문에 CSS는 렌더링 차단 리소스라고 하며, 렌더링이 되지 않도록 항상 `<head>` 아래에 작성해야 합니다.
-
-- `<script>`의 `defer`,`async` 속성 활용
-  - 단, 브라우저별로 지원 범위가 상이함 (**[can I use](https://caniuse.com)** 에서 확인)
-- 병목 코드 개선 - 반복 호출 제거 - 중복 코드 제거 - 만능 유틸 사용을 지양하고 필요한 기능만 활용 - ex) lodash 사용 시 필요한 함수만 부분적으로 사용 혹은 직접 필요한 모듈 구현하기
-  {% highlight javascript linenos%}
-  // instead of
-  import \_ from 'lodash'
-  // use
-  import { get, reduce } from 'lodash'
-  {% endhighlight %}
-- `repaint`, `reflow` 줄이기
-  - DOM 및 스타일 변경 최소화
-  - 불필요한 마크업 사용 지양
-  - ...
+// GPU 가속 활용 (효율적)
+.box {
+transform: translateX(10px);
+opacity: 0.5;
+}
+{% endhighlight %}
 
 ---
 
@@ -203,7 +317,36 @@ render (
 
 (1) **브라우저 렌더링 과정**을 이해하고
 
-`(리소스 다운로드 -> HTML & CSS 파싱 -> 스타일 (DOM, CSSOM를 조합한 렌더 트리 구성) -> 레이아웃 -> 페인트 -> 합성)`
+```typograms
++-------------------+
+| Resource Download |
++---------+---------+
+          |
+          v
++---------+---------+
+| HTML & CSS Parse  |
++---------+---------+
+          |
+          v
++---------+---------+
+| Style (RenderTree)|
++---------+---------+
+          |
+          v
++---------+---------+
+|      Layout       |
++---------+---------+
+          |
+          v
++---------+---------+
+|       Paint       |
++---------+---------+
+          |
+          v
++---------+---------+
+|     Composite     |
++-------------------+
+```
 
 (2) 개발자 도구에서 제공하는 여러가지 지표들을 통해 **병목 구간**을 찾아내고
 
@@ -229,3 +372,5 @@ render (
 📌 [TOAST - 성능 최적화](https://ui.toast.com/fe-guide/ko_PERFORMANCE)
 
 📌 [DEVIEW2018 - 웹 성능 최적화에 필요한 브라우저의 모든 것](https://tv.naver.com/v/4578425)
+
+📌 [MDN : HTTP Caching](https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching)
