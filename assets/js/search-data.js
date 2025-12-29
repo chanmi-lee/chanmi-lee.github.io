@@ -16,7 +16,18 @@ ninja.data = [{
           handler: () => {
             window.location.href = "/blog/";
           },
-        },{id: "post-cookie-vs-session-vs-webstorage",
+        },{id: "post-why-i-run-feat-내가-달리기를-좋아하는-이유",
+        
+          title: "Why I Run (feat. 내가 달리기를 좋아하는 이유)",
+        
+        description: "",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/articles/2022-12/why-I-run/";
+          
+        },
+      },{id: "post-cookie-vs-session-vs-webstorage",
         
           title: "cookie vs session vs webStorage",
         
