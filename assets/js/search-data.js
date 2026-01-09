@@ -16,7 +16,18 @@ ninja.data = [{
           handler: () => {
             window.location.href = "/blog/";
           },
-        },{id: "post-why-i-run-feat-내가-달리기를-좋아하는-이유",
+        },{id: "post-renovate로-패키지-버전-관리-자동화하기",
+        
+          title: "Renovate로 패키지 버전 관리 자동화하기",
+        
+        description: "",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/articles/2023-07/automating-dependency-updates-with-renovate/";
+          
+        },
+      },{id: "post-why-i-run-feat-내가-달리기를-좋아하는-이유",
         
           title: "Why I Run (feat. 내가 달리기를 좋아하는 이유)",
         
