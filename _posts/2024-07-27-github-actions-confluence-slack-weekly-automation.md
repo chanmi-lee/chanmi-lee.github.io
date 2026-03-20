@@ -146,8 +146,7 @@ const SPACE_KEY = "TEAM";
 // =====================================================================
 
 // Basic Auth 헤더값 생성
-const authHeader =
-  "Basic " + Buffer.from(`${EMAIL}:${API_TOKEN}`).toString("base64");
+const authHeader = "Basic " + Buffer.from(`${EMAIL}:${API_TOKEN}`).toString("base64");
 const headers = {
   "Content-Type": "application/json",
   Accept: "application/json",
@@ -176,10 +175,7 @@ function getThisThursday() {
 async function getPage(pageId) {
   const url = `${CONFLUENCE_BASE_URL}/rest/api/content/${pageId}?expand=body.storage`;
   const res = await fetch(url, { headers });
-  if (!res.ok)
-    throw new Error(
-      `getPage 실패 [${pageId}]: ${res.status} ${await res.text()}`,
-    );
+  if (!res.ok) throw new Error(`getPage 실패 [${pageId}]: ${res.status} ${await res.text()}`);
   return res.json();
 }
 
@@ -189,10 +185,7 @@ async function getPage(pageId) {
 async function getChildren(pageId) {
   const url = `${CONFLUENCE_BASE_URL}/rest/api/content/${pageId}/child/page?limit=50`;
   const res = await fetch(url, { headers });
-  if (!res.ok)
-    throw new Error(
-      `getChildren 실패 [${pageId}]: ${res.status} ${await res.text()}`,
-    );
+  if (!res.ok) throw new Error(`getChildren 실패 [${pageId}]: ${res.status} ${await res.text()}`);
   const data = await res.json();
   return data.results ?? [];
 }
@@ -227,10 +220,7 @@ async function createPage(title, body, parentId) {
     headers,
     body: JSON.stringify(payload),
   });
-  if (!res.ok)
-    throw new Error(
-      `createPage 실패 [${title}]: ${res.status} ${await res.text()}`,
-    );
+  if (!res.ok) throw new Error(`createPage 실패 [${title}]: ${res.status} ${await res.text()}`);
 
   const created = await res.json();
   console.log(`  ✅ 생성됨: [${created.title}] (ID: ${created.id})`);
@@ -249,10 +239,7 @@ function replaceChildTitlesInBody(body, titleMap) {
   let updatedBody = body;
   for (const [oldTitle, newTitle] of Object.entries(titleMap)) {
     // ri:content-title="Kate" 형태의 매크로 참조 교체
-    updatedBody = updatedBody.replaceAll(
-      `ri:content-title="${oldTitle}"`,
-      `ri:content-title="${newTitle}"`,
-    );
+    updatedBody = updatedBody.replaceAll(`ri:content-title="${oldTitle}"`, `ri:content-title="${newTitle}"`);
   }
   return updatedBody;
 }
@@ -284,23 +271,14 @@ async function updatePage(pageId, title, body) {
     headers,
     body: JSON.stringify(payload),
   });
-  if (!updateRes.ok)
-    throw new Error(
-      `updatePage 실패 [${title}]: ${updateRes.status} ${await updateRes.text()}`,
-    );
+  if (!updateRes.ok) throw new Error(`updatePage 실패 [${title}]: ${updateRes.status} ${await updateRes.text()}`);
   console.log(`  🔄 업데이트됨: [${title}]`);
 }
 
 /**
  * 소스 페이지와 모든 하위 페이지를 재귀적으로 복제
  */
-async function clonePageTree(
-  sourcePageId,
-  parentId,
-  thursdayDate,
-  depth = 0,
-  createdPages = [],
-) {
+async function clonePageTree(sourcePageId, parentId, thursdayDate, depth = 0, createdPages = []) {
   const indent = "  ".repeat(depth);
   const page = await getPage(sourcePageId);
   const originalTitle = page.title;
@@ -323,22 +301,14 @@ async function clonePageTree(
     const childPage = await getPage(child.id);
     const newChildTitle = buildNewTitle(childPage.title, thursdayDate);
     titleMap[childPage.title] = newChildTitle;
-    await clonePageTree(
-      child.id,
-      newPageId,
-      thursdayDate,
-      depth + 1,
-      createdPages,
-    );
+    await clonePageTree(child.id, newPageId, thursdayDate, depth + 1, createdPages);
   }
 
   // children 제목이 변경된 경우 parent 본문의 매크로 참조도 업데이트
   if (Object.keys(titleMap).length > 0) {
     const updatedBody = replaceChildTitlesInBody(body, titleMap);
     if (updatedBody !== body) {
-      console.log(
-        `${indent}🔄 parent 본문 매크로 참조 업데이트 중: '${newTitle}'`,
-      );
+      console.log(`${indent}🔄 parent 본문 매크로 참조 업데이트 중: '${newTitle}'`);
       await sleep(1500);
       await updatePage(newPageId, newTitle, updatedBody);
     }
@@ -348,19 +318,14 @@ async function clonePageTree(
 /**
  * Slack으로 알림 전송
  */
-async function sendSlackNotification({
-  thursdayDate,
-  createdPages,
-  errorMessage,
-}) {
+async function sendSlackNotification({ thursdayDate, createdPages, errorMessage }) {
   if (!SLACK_WEBHOOK_URL) {
     console.log("⚠️  SLACK_WEBHOOK_URL 미설정 — Slack 알림 생략");
     return;
   }
 
   const isSuccess = !errorMessage;
-  const pageLink = (p) =>
-    `<${CONFLUENCE_BASE_URL}/spaces/${SPACE_KEY}/pages/${p.id}|${p.title}>`;
+  const pageLink = (p) => `<${CONFLUENCE_BASE_URL}/spaces/${SPACE_KEY}/pages/${p.id}|${p.title}>`;
 
   const parentPage = createdPages[0];
   const childPages = createdPages.slice(1);
@@ -373,9 +338,7 @@ async function sendSlackNotification({
         text: [
           "이번주 팀 위클리 미팅 노트 공유 드립니다.",
           parentPage ? pageLink(parentPage) : "",
-          childPages.length > 0
-            ? childPages.map((p) => `• ${pageLink(p)}`).join("\n")
-            : "",
+          childPages.length > 0 ? childPages.map((p) => `• ${pageLink(p)}`).join("\n") : "",
         ]
           .filter(Boolean)
           .join("\n"),
@@ -436,13 +399,7 @@ async function main() {
   console.log("=".repeat(50));
 
   try {
-    await clonePageTree(
-      TEMPLATE_PAGE_ID,
-      PARENT_PAGE_ID,
-      thursdayDate,
-      0,
-      createdPages,
-    );
+    await clonePageTree(TEMPLATE_PAGE_ID, PARENT_PAGE_ID, thursdayDate, 0, createdPages);
     console.log("=".repeat(50));
     console.log("🎉 완료!");
     await sendSlackNotification({ thursdayDate, createdPages });
@@ -488,7 +445,7 @@ main();
 | ------------------- | ---------------------------------------------------------------------------------- |
 | `CONFLUENCE_EMAIL`  | Atlassian 계정 이메일                                                              |
 | `CONFLUENCE_TOKEN`  | [Atlassian API Token](https://id.atlassian.com/manage-profile/security/api-tokens) |
-| `SLACK_WEBHOOK_URL` | Slack App의 Incoming Webhook                                  |
+| `SLACK_WEBHOOK_URL` | Slack App의 Incoming Webhook                                                       |
 
 `.env`는 **origin rep에 커밋하지 말고** `.gitignore`에 넣어 두는 걸 추천해요.
 
