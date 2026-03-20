@@ -9,7 +9,7 @@ comments: true
 
 ---
 
-# 🗓️ GitHub Actions로 Confluence 위클리 노트 만들고, Slack으로 살짝 알려요
+# 🗓️ GitHub Workflow Actions 으로 생산성 높이기
 
 매주 직접 팀 위클리 미팅 페이지를 복제하고 링크를 슬랙에 올리는 건 단순한 작업이지만, 생각보다 귀찮은 일이기도 해요. "매주 위클리 미팅 노트를 생성하고 슬랙으로 공유하는 반복 작업을 자동화 할 수 없을까?" 라는 생각이 들었어요.
 
@@ -17,7 +17,7 @@ comments: true
 
 ---
 
-## 이번 자동화가 해 주는 일
+## GitHub Actions로 Confluence 위클리 노트 자동화
 
 정리하면 이렇게 동작해요.
 
@@ -25,10 +25,6 @@ comments: true
 - **성공**하면 Slack에 **만들어진 페이지 링크**가 온다.
 - **실패**해도 Slack에 **에러 요약**이 온다 (CI만 빨간색이고 팀은 모르는 상황을 줄인다).
 - **`workflow_dispatch`**로 수동 실행도 할 수 있어서, 배포 전에 한 번 돌려보기 좋다.
-
----
-
-## 전체 그림
 
 ```mermaid
 flowchart LR
@@ -55,7 +51,7 @@ flowchart LR
 
 ---
 
-## GitHub Actions 워크플로
+## GitHub Action 으로 워크플로 스케줄링
 
 스케줄은 **cron**으로 설정해요. GitHub Actions의 cron은 **UTC 기준**이라, 한국 시간(KST)으로 맞출 때는 +9시간을 머릿속에 두고 조정하면 돼요.
 
@@ -89,14 +85,20 @@ jobs:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 ```
 
-### 참고하면 좋은 점
+### 참고: 로컬에서 미리 검증하기 · Node 맞추기 · Actions에서 수동 실행
 
-- **`workflow_dispatch`**: Actions 탭에서 수동 실행 → 시크릿·권한·스크립트를 배포 전에 확인하기 좋아요.
-- **Node 버전**은 로컬이랑 맞춰 두면, “내 PC에서는 되는데 CI에서만…” 같은 삽질을 줄일 수 있어요.
+**로컬에서 CI와 같은 일을 먼저 돌려보기**  
+CI 에서는 Github Secrets 에 설정된 값을 참조하여 실행되지만, 로컬에서는 이 값들을 `.env`에 넣어 미리 테스트 할 수 있어요. (`CONFLUENCE_EMAIL`, `CONFLUENCE_TOKEN`, `SLACK_WEBHOOK_URL`). 이렇게 하면 실제로 워크플로를 올리기 전에 스크립트·API 권한·Webhook까지 한 번에 확인할 수 있어요.
+
+**Node 버전은 CI와 맞추기**  
+위 예시는 `setup-node`에서 **Node 22**를 쓰고 있고, 스크립트 주석도 Node 22 기준이에요. 로컬도 **같은 메이저(22)**를 쓰면 문법·`fetch` 등 런타임 차이로 “로컬에서는 되는데 Actions에서만 깨지는” 상황을 줄일 수 있어요. 팀과 맞추려면 `scripts/package.json`에 `"engines": { "node": ">=22" }` 정도를 두고, `nvm` / `fnm` 등으로 버전을 고정해 두는 것도 도움이 돼요.
+
+**GitHub에서 워크플로 수동 실행 (`workflow_dispatch`)**  
+저장소 **Actions** 탭에서 워크플로 이름(**Weekly Confluence Page Clone**)을 선택하여 **Run workflow** 로 워크플로를 실행하면, cron으로 스케줄링된 시간과 별개로 바로 한 번 수동으로 실행돼요. 시크릿·권한·최근 수정분이 main에 합치기 전에 잘 도는지 확인할 때 쓰기 좋아요.
 
 ---
 
-## Confluence 쪽 스크립트는 뭐 하냐면
+## 그래서 Confluence 페이지를 자동 복제는 어떻게 하죠?
 
 팀마다 템플릿 구조가 다르니 구현은 자유지만, Conflunce template page의 복제 과정을 구현한 `confluenceWeeklyClone.js`는 아래의 과정을 거치게 돼요.
 
@@ -468,7 +470,7 @@ main();
 
 ---
 
-## Slack 알림
+## Slack 알림 연동하기
 
 **Incoming Webhook** URL을 GitHub Secrets에 넣고, 스크립트 마지막에 `fetch(POST)`로 Block Kit 형태 JSON을 보내요.
 
@@ -486,7 +488,7 @@ main();
 | ------------------- | ---------------------------------------------------------------------------------- |
 | `CONFLUENCE_EMAIL`  | Atlassian 계정 이메일                                                              |
 | `CONFLUENCE_TOKEN`  | [Atlassian API Token](https://id.atlassian.com/manage-profile/security/api-tokens) |
-| `SLACK_WEBHOOK_URL` | Slack App의 Incoming Webhook (없으면 알림만 안 감)                                 |
+| `SLACK_WEBHOOK_URL` | Slack App의 Incoming Webhook                                  |
 
 `.env`는 **origin rep에 커밋하지 말고** `.gitignore`에 넣어 두는 걸 추천해요.
 
@@ -520,9 +522,3 @@ main();
 비슷한 자동화를 이미 해보셨거나, Confluence 쪽에서 더 깔끔하게 처리하는 팁이 있으면 댓글로 공유해 주세요.
 
 ---
-
-## 레포에서 바로 볼 경로
-
-- `.github/workflows/weekly-confluence.yml` — 스케줄, Secrets 주입
-- `scripts/confluenceWeeklyClone.js` — 복제 + Slack
-- `scripts/README.md` — 로컬 실행 방법, Secrets 표
