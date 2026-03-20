@@ -16,7 +16,18 @@ ninja.data = [{
           handler: () => {
             window.location.href = "/blog/";
           },
-        },{id: "post-renovate로-패키지-버전-관리-자동화하기",
+        },{id: "post-github-workflow-actions-으로-생산성-높이기",
+        
+          title: "GitHub Workflow Actions 으로 생산성 높이기",
+        
+        description: "",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/articles/2024-07/github-actions-confluence-slack-weekly-automation/";
+          
+        },
+      },{id: "post-renovate로-패키지-버전-관리-자동화하기",
         
           title: "Renovate로 패키지 버전 관리 자동화하기",
         
