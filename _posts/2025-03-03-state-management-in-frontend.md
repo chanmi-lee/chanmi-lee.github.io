@@ -29,13 +29,13 @@ URL, localStorage, Redux, Context는 데이터가 있어야 할 자리를 두고
 
 ## 2. 상태의 다섯 종류
 
-| 종류 | 담당 도구 | 예시 | 성격 |
-| --- | --- | --- | --- |
-| 로컬 상태 | `useState`, `useReducer` | 입력 중 텍스트, 모달 열림 여부, 토글 | 메모리(런타임) |
-| 글로벌 / 공유 상태 | Context, Redux, Zustand, Jotai, Recoil | 로그인 정보, 테마 | 메모리(런타임) |
-| 서버 상태 | React Query(TanStack), SWR | API 응답, 목록·상세 데이터 | 원격 데이터의 캐시 |
-| URL 상태 | query param, path | 검색어, 필터, 페이지 번호 | 주소창(공유·북마크 등) |
-| 브라우저 저장소 | localStorage, sessionStorage, cookie | 토큰, 테마 설정값 | JS 바깥에 영속 |
+| 종류               | 담당 도구                              | 예시                                 | 성격                   |
+| ------------------ | -------------------------------------- | ------------------------------------ | ---------------------- |
+| 로컬 상태          | `useState`, `useReducer`               | 입력 중 텍스트, 모달 열림 여부, 토글 | 메모리(런타임)         |
+| 글로벌 / 공유 상태 | Context, Redux, Zustand, Jotai, Recoil | 로그인 정보, 테마                    | 메모리(런타임)         |
+| 서버 상태          | React Query(TanStack), SWR             | API 응답, 목록·상세 데이터           | 원격 데이터의 캐시     |
+| URL 상태           | query param, path                      | 검색어, 필터, 페이지 번호            | 주소창(공유·북마크 등) |
+| 브라우저 저장소    | localStorage, sessionStorage, cookie   | 토큰, 테마 설정값                    | JS 바깥에 영속         |
 
 ### 종류별 요점
 
@@ -54,9 +54,9 @@ URL, localStorage, Redux, Context는 데이터가 있어야 할 자리를 두고
 
 ```js
 // 1) 액션 타입 상수
-const INCREMENT = 'counter/INCREMENT';
-const DECREMENT = 'counter/DECREMENT';
-const INCREMENT_BY = 'counter/INCREMENT_BY';
+const INCREMENT = "counter/INCREMENT";
+const DECREMENT = "counter/DECREMENT";
+const INCREMENT_BY = "counter/INCREMENT_BY";
 
 // 2) 액션 생성자 (action creator)
 const increment = () => ({ type: INCREMENT });
@@ -85,16 +85,22 @@ function counterReducer(state = initialState, action) {
 
 ```js
 // Redux Toolkit - 같은 기능을 slice 하나로 처리
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 const counterSlice = createSlice({
-  name: 'counter',
+  name: "counter",
   initialState: { value: 0 },
   reducers: {
-    increment: (state) => { state.value += 1 }, // 직접 변경처럼 보이지만
-    decrement: (state) => { state.value -= 1 }, // Immer가 불변성을 처리
-    incrementBy: (state, action) => { state.value += action.payload }
-  }
+    increment: (state) => {
+      state.value += 1;
+    }, // 직접 변경처럼 보이지만
+    decrement: (state) => {
+      state.value -= 1;
+    }, // Immer가 불변성을 처리
+    incrementBy: (state, action) => {
+      state.value += action.payload;
+    },
+  },
 });
 
 export const { increment, decrement, incrementBy } = counterSlice.actions;
@@ -110,14 +116,14 @@ export const { increment, decrement, incrementBy } = counterSlice.actions;
 
 한 문장으로 요약하면 **"상태를 어떻게 예측 가능하게 만들 것인가"** 의 역사다.
 
-| 시기 | 흐름 | 의미 |
-| --- | --- | --- |
-| ~2010 | DOM이 곧 상태 (jQuery) | 데이터와 화면이 뒤섞여 추적 불가 |
-| 2010~ | MVC / AngularJS (1.x), Backbone.js | Model·View 분리, 그러나 양방향 바인딩의 복잡함 노출 |
-| 2014 | Flux (Facebook) | 단방향 데이터 흐름 패턴 → "예측 가능한 상태"의 시작 |
-| 2015 | Redux | Flux 단순화(단일 store, 시간여행 디버깅) → 사실상 표준 |
-| 2018~2019 | Context API & Hooks | React 내장 도구, 외부 라이브러리 없이 처리 가능한 경우 증가 |
-| 2019~ | 서버 상태 분리 & 경량화 | React Query/SWR로 서버 상태 분리, Zustand·Jotai·Recoil 등 가벼운 대안 |
+| 시기      | 흐름                               | 의미                                                                  |
+| --------- | ---------------------------------- | --------------------------------------------------------------------- |
+| ~2010     | DOM이 곧 상태 (jQuery)             | 데이터와 화면이 뒤섞여 추적 불가                                      |
+| 2010~     | MVC / AngularJS (1.x), Backbone.js | Model·View 분리, 그러나 양방향 바인딩의 복잡함 노출                   |
+| 2014      | Flux (Facebook)                    | 단방향 데이터 흐름 패턴 → "예측 가능한 상태"의 시작                   |
+| 2015      | Redux                              | Flux 단순화(단일 store, 시간여행 디버깅) → 사실상 표준                |
+| 2018~2019 | Context API & Hooks                | React 내장 도구, 외부 라이브러리 없이 처리 가능한 경우 증가           |
+| 2019~     | 서버 상태 분리 & 경량화            | React Query/SWR로 서버 상태 분리, Zustand·Jotai·Recoil 등 가벼운 대안 |
 
 양방향 데이터 바인딩은 모델과 화면이 서로를 자동으로 갱신하기 때문에, "언제·무엇이·무엇 때문에 바뀌었는지" 추적이 어려웠다.
 
@@ -130,18 +136,18 @@ Flux/Redux로 대표되는 단방향 데이터 바인딩으로의 전환은 이�
 
 ```js
 // 1) action: "무슨 일이 일어났는지" 기술한 객체
-const increment = { type: 'counter/INCREMENT' };
+const increment = { type: "counter/INCREMENT" };
 
 // 2) dispatch
 store.dispatch(increment);
 
 // 3) reducer
 const initialState = {
-  value: 0
+  value: 0,
 };
 function counterReducer(state = initialState, action) {
   switch (action.type) {
-    case 'counter/INCREMENT':
+    case "counter/INCREMENT":
       return { value: state.value + 1 }; // 새 state 반환 (직접 변경 X)
     default:
       return state;
@@ -205,7 +211,7 @@ useEffect(() => {
 
 ```js
 useEffect(() => {
-  const id = setInterval(() => console.log('tick'), 1000);
+  const id = setInterval(() => console.log("tick"), 1000);
   return () => clearInterval(id); // cleanup
 }, []);
 ```
@@ -229,11 +235,7 @@ class Counter extends React.Component {
   } // 중복
 
   render() {
-    return (
-      <button onClick={() => this.setState({ count: this.state.count + 1 })}>
-        {this.state.count}
-      </button>
-    );
+    return <button onClick={() => this.setState({ count: this.state.count + 1 })}>{this.state.count}</button>;
   }
 }
 
@@ -266,11 +268,7 @@ React 16.3 버전 당시, Context는 처음엔 render props 방식이라 중첩�
 ```jsx
 // 이전 (React 16.3): Consumer (render prop) — 중첩이 깊어짐
 <ThemeContext.Consumer>
-  {theme => (
-    <UserContext.Consumer>
-      {user => <div className={theme}>{user.name}</div>}
-    </UserContext.Consumer>
-  )}
+  {(theme) => <UserContext.Consumer>{(user) => <div className={theme}>{user.name}</div>}</UserContext.Consumer>}
 </ThemeContext.Consumer>
 ```
 
@@ -280,7 +278,7 @@ React 16.8 버전부터 Hooks가 지원됨에 따라, `useContext`로 Context를
 // 이후: useContext — 한 줄
 function Profile() {
   const theme = useContext(ThemeContext);
-  const user  = useContext(UserContext);
+  const user = useContext(UserContext);
   return <div className={theme}>{user.name}</div>;
 }
 ```
@@ -354,28 +352,28 @@ function Profile() {
 ### 7.1 필터 읽기·쓰기 (react-router)
 
 ```jsx
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from "react-router-dom";
 
 function ProductList() {
   const [searchParams, setSearchParams] = useSearchParams();
   // URL이 곧 상태 — 별도의 useState를 두지 않는다
-  const query    = searchParams.get('q') ?? '';
-  const category = searchParams.get('category') ?? 'all';
-  const sort     = searchParams.get('sort') ?? 'latest';
-  const page     = Number(searchParams.get('page') ?? '1');
+  const query = searchParams.get("q") ?? "";
+  const category = searchParams.get("category") ?? "all";
+  const sort = searchParams.get("sort") ?? "latest";
+  const page = Number(searchParams.get("page") ?? "1");
 
   // 일부 필터만 갱신하는 헬퍼 (나머지 param은 유지)
   const updateFilter = (patch) => {
     setSearchParams((prev) => {
       const next = new URLSearchParams(prev);
       Object.entries(patch).forEach(([key, value]) => {
-        if (value === '' || value == null || value === 'all') {
-          next.delete(key);      // 기본값/빈 값은 URL에서 제거 → 주소가 깔끔해짐
+        if (value === "" || value == null || value === "all") {
+          next.delete(key); // 기본값/빈 값은 URL에서 제거 → 주소가 깔끔해짐
         } else {
           next.set(key, String(value));
         }
       });
-      next.set('page', '1');     // 필터가 바뀌면 1페이지로 리셋
+      next.set("page", "1"); // 필터가 바뀌면 1페이지로 리셋
       return next;
     });
   };
@@ -404,7 +402,7 @@ function ProductList() {
 
 ```js
 // hooks/useDebounce.js
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 export function useDebounce(value, delay = 300) {
   const [debounced, setDebounced] = useState(value);
@@ -421,25 +419,28 @@ export function useDebounce(value, delay = 300) {
 ### 7.3 입력창: 로컬 상태 + URL
 
 ```jsx
-import { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import { useDebounce } from '../hooks/useDebounce';
+import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
+import { useDebounce } from "../hooks/useDebounce";
 
 function SearchBox() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const urlQuery = searchParams.get('q') ?? '';
-  const [input, setInput] = useState(urlQuery);     // 입력 중인 값 (로컬, 즉각 반응)
-  const debouncedQuery = useDebounce(input, 300);   // 멈춘 뒤 확정된 값
+  const urlQuery = searchParams.get("q") ?? "";
+  const [input, setInput] = useState(urlQuery); // 입력 중인 값 (로컬, 즉각 반응)
+  const debouncedQuery = useDebounce(input, 300); // 멈춘 뒤 확정된 값
 
   // 확정된 검색어를 URL에 반영
   useEffect(() => {
-    if (debouncedQuery === urlQuery) return;  // 이미 같으면 건너뜀 → 무한 루프 방지
-    setSearchParams((prev) => {
-      const next = new URLSearchParams(prev);
-      debouncedQuery ? next.set('q', debouncedQuery) : next.delete('q');
-      next.set('page', '1');
-      return next;
-    }, { replace: true });  // 타이핑마다 히스토리가 쌓이지 않게 replace
+    if (debouncedQuery === urlQuery) return; // 이미 같으면 건너뜀 → 무한 루프 방지
+    setSearchParams(
+      (prev) => {
+        const next = new URLSearchParams(prev);
+        debouncedQuery ? next.set("q", debouncedQuery) : next.delete("q");
+        next.set("page", "1");
+        return next;
+      },
+      { replace: true }
+    ); // 타이핑마다 히스토리가 쌓이지 않게 replace
   }, [debouncedQuery, urlQuery, setSearchParams]);
 
   // 뒤로가기 등 외부에서 URL이 바뀌면 입력창 동기화
@@ -447,13 +448,7 @@ function SearchBox() {
     setInput(urlQuery);
   }, [urlQuery]);
 
-  return (
-    <input
-      value={input}
-      onChange={(e) => setInput(e.target.value)}
-      placeholder="검색어 입력"
-    />
-  );
+  return <input value={input} onChange={(e) => setInput(e.target.value)} placeholder="검색어 입력" />;
 }
 ```
 
@@ -465,7 +460,7 @@ URL에서 읽은 값을 React Query의 `queryKey`에 넣으면, URL이 바뀔 �
 
 ```js
 const { data } = useQuery({
-  queryKey: ['products', { query, category, sort, page }],
+  queryKey: ["products", { query, category, sort, page }],
   queryFn: () => fetchProducts({ query, category, sort, page }),
 });
 ```
@@ -486,25 +481,28 @@ const { data } = useQuery({
 
 ```jsx
 // ThemeContext.jsx
-import { createContext, useContext, useReducer, useEffect } from 'react';
+import { createContext, useContext, useReducer, useEffect } from "react";
 
 const ThemeStateContext = createContext(null);
 const ThemeDispatchContext = createContext(null);
-const STORAGE_KEY = 'theme';
+const STORAGE_KEY = "theme";
 
 function getInitialTheme() {
   const saved = localStorage.getItem(STORAGE_KEY);
-  if (saved === 'light' || saved === 'dark') return saved;
+  if (saved === "light" || saved === "dark") return saved;
 
   // 저장값이 없으면 OS 설정을 따른다
-  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 }
 
 function themeReducer(theme, action) {
   switch (action.type) {
-    case 'toggle': return theme === 'dark' ? 'light' : 'dark';
-    case 'set':    return action.theme;
-    default: throw new Error(`알 수 없는 액션: ${action.type}`);
+    case "toggle":
+      return theme === "dark" ? "light" : "dark";
+    case "set":
+      return action.theme;
+    default:
+      throw new Error(`알 수 없는 액션: ${action.type}`);
   }
 }
 
@@ -521,9 +519,7 @@ export function ThemeProvider({ children }) {
   return (
     // dispatch는 useReducer가 반환하는 고정 참조 → 메모이즈 불필요
     <ThemeDispatchContext.Provider value={dispatch}>
-      <ThemeStateContext.Provider value={theme}>
-        {children}
-      </ThemeStateContext.Provider>
+      <ThemeStateContext.Provider value={theme}>{children}</ThemeStateContext.Provider>
     </ThemeDispatchContext.Provider>
   );
 }
@@ -532,13 +528,13 @@ export function ThemeProvider({ children }) {
 // Provider 바깥에서 잘못 호출하는 실수를 방지하기 위하여 곧바로 에러로 잡아주는 안전 장치
 export function useThemeValue() {
   const ctx = useContext(ThemeStateContext);
-  if (ctx === null) throw new Error('useThemeValue는 ThemeProvider 안에서만 쓸 수 있습니다');
+  if (ctx === null) throw new Error("useThemeValue는 ThemeProvider 안에서만 쓸 수 있습니다");
   return ctx;
 }
 
 export function useThemeDispatch() {
   const ctx = useContext(ThemeDispatchContext);
-  if (ctx === null) throw new Error('useThemeDispatch는 ThemeProvider 안에서만 쓸 수 있습니다');
+  if (ctx === null) throw new Error("useThemeDispatch는 ThemeProvider 안에서만 쓸 수 있습니다");
   return ctx;
 }
 ```
@@ -567,7 +563,7 @@ function ThemeLabel() {
 // dispatch만 쓰는 컴포넌트 — theme이 바뀌어도 리렌더링되지 않음
 function ThemeToggleButton() {
   const dispatch = useThemeDispatch();
-  return <button onClick={() => dispatch({ type: 'toggle' })}>테마 전환</button>;
+  return <button onClick={() => dispatch({ type: "toggle" })}>테마 전환</button>;
 }
 ```
 
@@ -597,12 +593,12 @@ function ThemeToggleButton() {
 
 ### 9.1 토큰을 어디에 저장할까
 
-| 저장 위치 | XSS(스크립트 주입) | CSRF | 새로고침 유지 | 비고 |
-| --- | --- | --- | --- | --- |
-| localStorage | 취약 (JS가 그대로 읽음) | 안전 | O | 가장 간단하지만 토큰 탈취 위험 |
-| sessionStorage | 취약 | 안전 | 탭 한정 | localStorage와 동일 위험 |
-| 메모리(JS 변수/store) | 상대적 안전(영속 안 됨) | 안전 | X | access token에 적합 |
-| httpOnly 쿠키 | 안전(JS가 못 읽음) | 취약 → SameSite로 완화 | O | refresh token에 적합 |
+| 저장 위치             | XSS(스크립트 주입)      | CSRF                   | 새로고침 유지 | 비고                           |
+| --------------------- | ----------------------- | ---------------------- | ------------- | ------------------------------ |
+| localStorage          | 취약 (JS가 그대로 읽음) | 안전                   | O             | 가장 간단하지만 토큰 탈취 위험 |
+| sessionStorage        | 취약                    | 안전                   | 탭 한정       | localStorage와 동일 위험       |
+| 메모리(JS 변수/store) | 상대적 안전(영속 안 됨) | 안전                   | X             | access token에 적합            |
+| httpOnly 쿠키         | 안전(JS가 못 읽음)      | 취약 → SameSite로 완화 | O             | refresh token에 적합           |
 
 localStorage에 토큰을 넣으면 XSS 한 방에 통째로 털린다. XSS에 의해 페이지에 악성 스크립트가 실행되면(예 - `localStorage.getItem('token')`) 토큰을 그대로 읽어갈 수 있기 때문이다.
 
@@ -620,8 +616,12 @@ let accessToken = null;
 
 export const tokenStore = {
   get: () => accessToken,
-  set: (t) => { accessToken = t; },
-  clear: () => { accessToken = null; },
+  set: (t) => {
+    accessToken = t;
+  },
+  clear: () => {
+    accessToken = null;
+  },
 };
 ```
 
@@ -635,17 +635,17 @@ access token이 메모리에만 있으니, 모든 요청에 이를 꺼내 붙여
 
 ```js
 // auth/apiClient.js
-import { tokenStore } from './tokenStore';
+import { tokenStore } from "./tokenStore";
 
 let refreshPromise = null;
 
 async function refreshAccessToken() {
   // refresh 토큰은 httpOnly 쿠키 → JS가 직접 다루지 않고 credentials로 자동 전송
-  const res = await fetch('/api/auth/refresh', {
-    method: 'POST',
-    credentials: 'include',
+  const res = await fetch("/api/auth/refresh", {
+    method: "POST",
+    credentials: "include",
   });
-  if (!res.ok) throw new Error('refresh 실패');
+  if (!res.ok) throw new Error("refresh 실패");
 
   const { accessToken } = await res.json();
   tokenStore.set(accessToken);
@@ -667,7 +667,7 @@ export async function apiFetch(url, options = {}) {
   const token = tokenStore.get();
   let res = await fetch(url, {
     ...options,
-    credentials: 'include',
+    credentials: "include",
     headers: {
       ...options.headers,
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
@@ -680,12 +680,12 @@ export async function apiFetch(url, options = {}) {
       const newToken = await refreshOnce();
       res = await fetch(url, {
         ...options,
-        credentials: 'include',
+        credentials: "include",
         headers: { ...options.headers, Authorization: `Bearer ${newToken}` },
       });
     } catch (e) {
       tokenStore.clear();
-      window.dispatchEvent(new Event('auth:logout')); // 전역 로그아웃
+      window.dispatchEvent(new Event("auth:logout")); // 전역 로그아웃
       throw e;
     }
   }
@@ -703,21 +703,24 @@ export async function apiFetch(url, options = {}) {
 
 ```jsx
 // auth/AuthContext.jsx
-import { createContext, useContext, useReducer, useEffect } from 'react';
-import { tokenStore } from './tokenStore';
-import { apiFetch } from './apiClient';
+import { createContext, useContext, useReducer, useEffect } from "react";
+import { tokenStore } from "./tokenStore";
+import { apiFetch } from "./apiClient";
 
 const AuthStateContext = createContext(null);
 const AuthDispatchContext = createContext(null);
 
 // status: 'loading' | 'authenticated' | 'unauthenticated'
-const initialState = { user: null, status: 'loading' };
+const initialState = { user: null, status: "loading" };
 
 function authReducer(state, action) {
   switch (action.type) {
-    case 'login':  return { user: action.user, status: 'authenticated' };
-    case 'logout': return { user: null, status: 'unauthenticated' };
-    default: throw new Error(`알 수 없는 액션: ${action.type}`);
+    case "login":
+      return { user: action.user, status: "authenticated" };
+    case "logout":
+      return { user: null, status: "unauthenticated" };
+    default:
+      throw new Error(`알 수 없는 액션: ${action.type}`);
   }
 }
 
@@ -729,39 +732,40 @@ export function AuthProvider({ children }) {
     let alive = true;
     (async () => {
       try {
-        const res = await apiFetch('/api/me'); // 401이면 내부에서 refresh 시도
+        const res = await apiFetch("/api/me"); // 401이면 내부에서 refresh 시도
         if (!res.ok) throw new Error();
         const user = await res.json();
-        if (alive) dispatch({ type: 'login', user });
+        if (alive) dispatch({ type: "login", user });
       } catch {
-        if (alive) dispatch({ type: 'logout' });
+        if (alive) dispatch({ type: "logout" });
       }
     })();
 
     // apiClient가 보내는 전역 로그아웃 신호 수신
-    const onLogout = () => dispatch({ type: 'logout' });
-    window.addEventListener('auth:logout', onLogout);
-    return () => { alive = false; window.removeEventListener('auth:logout', onLogout); };
+    const onLogout = () => dispatch({ type: "logout" });
+    window.addEventListener("auth:logout", onLogout);
+    return () => {
+      alive = false;
+      window.removeEventListener("auth:logout", onLogout);
+    };
   }, []);
 
   return (
     <AuthDispatchContext.Provider value={dispatch}>
-      <AuthStateContext.Provider value={state}>
-        {children}
-      </AuthStateContext.Provider>
+      <AuthStateContext.Provider value={state}>{children}</AuthStateContext.Provider>
     </AuthDispatchContext.Provider>
   );
 }
 
 export function useAuth() {
   const ctx = useContext(AuthStateContext);
-  if (ctx === null) throw new Error('useAuth는 AuthProvider 안에서만 쓸 수 있습니다');
+  if (ctx === null) throw new Error("useAuth는 AuthProvider 안에서만 쓸 수 있습니다");
   return ctx;
 }
 
 export function useAuthDispatch() {
   const ctx = useContext(AuthDispatchContext);
-  if (ctx === null) throw new Error('useAuthDispatch는 AuthProvider 안에서만 쓸 수 있습니다');
+  if (ctx === null) throw new Error("useAuthDispatch는 AuthProvider 안에서만 쓸 수 있습니다");
   return ctx;
 }
 ```
@@ -770,22 +774,22 @@ export function useAuthDispatch() {
 
 ```js
 export async function login(dispatch, credentials) {
-  const res = await fetch('/api/auth/login', {
-    method: 'POST',
-    credentials: 'include', // 서버가 refresh 토큰을 httpOnly 쿠키로 내려줌
-    headers: { 'Content-Type': 'application/json' },
+  const res = await fetch("/api/auth/login", {
+    method: "POST",
+    credentials: "include", // 서버가 refresh 토큰을 httpOnly 쿠키로 내려줌
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(credentials),
   });
-  if (!res.ok) throw new Error('로그인 실패');
+  if (!res.ok) throw new Error("로그인 실패");
   const { accessToken, user } = await res.json();
-  tokenStore.set(accessToken);          // access token은 메모리에만
-  dispatch({ type: 'login', user });    // 인증 상태 갱신
+  tokenStore.set(accessToken); // access token은 메모리에만
+  dispatch({ type: "login", user }); // 인증 상태 갱신
 }
 
 export async function logout(dispatch) {
-  await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
+  await fetch("/api/auth/logout", { method: "POST", credentials: "include" });
   tokenStore.clear();
-  dispatch({ type: 'logout' });
+  dispatch({ type: "logout" });
 }
 ```
 
@@ -794,13 +798,13 @@ export async function logout(dispatch) {
 앞서 9.4에서 `loading` 상태를 따로 둔 이유가 있다. 앱이 막 켜진 직후에는 세션 복원이 아직 끝나지 않아 "로그인 여부를 모르는" 구간이 존재한다. 이때 단순히 "로그인 안됨"으로 간주하면 실제로는 로그인된 사용자가 새로고침할 때마다 잠깐 로그인 페이지로 튕겼다가 다시 돌아오게 되는 현상이 생기게 된다. 그래서 `loading` 상태를 두고 로딩 화면을 보여주는 등 로그인 세션이 복원되고 있는 구간을 따로 두고 복원이 끝나 상태가 확정되고 난 뒤 로그인 페이지로 돌려보낼지 여부를 정한다.
 
 ```jsx
-import { Navigate } from 'react-router-dom';
-import { useAuth } from './auth/AuthContext';
+import { Navigate } from "react-router-dom";
+import { useAuth } from "./auth/AuthContext";
 
 function ProtectedRoute({ children }) {
   const { status } = useAuth();
-  if (status === 'loading') return <FullPageSpinner />;          // 복원 대기
-  if (status === 'unauthenticated') return <Navigate to="/login" replace />;
+  if (status === "loading") return <FullPageSpinner />; // 복원 대기
+  if (status === "unauthenticated") return <Navigate to="/login" replace />;
   return children;
 }
 ```
@@ -835,9 +839,9 @@ Vite 기반의 CSR은 그대로 두고, 앞단에 별도 BFF 서버(Node 등)를
 
 ```js
 // bff/server.js — 프론트와 "같은 오리진"으로 노출되는 별도 Node 서버
-import express from 'express';
-import cookieParser from 'cookie-parser';
-import crypto from 'node:crypto';
+import express from "express";
+import cookieParser from "cookie-parser";
+import crypto from "node:crypto";
 
 const app = express();
 app.use(express.json());
@@ -846,17 +850,17 @@ app.use(cookieParser());
 // 서버 측 세션 저장소 (예시는 메모리 — 실제로는 Redis 등을 쓴다)
 const sessions = new Map(); // sid -> { accessToken, refreshToken, user }
 
-const AUTH_API = 'https://auth.example.com';
-const RESOURCE_API = 'https://api.example.com';
+const AUTH_API = "https://auth.example.com";
+const RESOURCE_API = "https://api.example.com";
 
 // 1) 로그인: 자격증명 → 토큰 교환 → 서버 세션에 보관 → 브라우저엔 세션 쿠키만
-app.post('/auth/login', async (req, res) => {
+app.post("/auth/login", async (req, res) => {
   const r = await fetch(`${AUTH_API}/token`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(req.body),
   });
-  if (!r.ok) return res.status(401).json({ error: 'login failed' });
+  if (!r.ok) return res.status(401).json({ error: "login failed" });
 
   const { accessToken, refreshToken, user } = await r.json();
 
@@ -864,41 +868,41 @@ app.post('/auth/login', async (req, res) => {
   sessions.set(sid, { accessToken, refreshToken, user }); // 토큰은 여기, 서버에만 머문다
 
   // 브라우저로는 "세션 ID(sid)"만 전달 (httpOnly)
-  res.cookie('sid', sid, {
+  res.cookie("sid", sid, {
     httpOnly: true,
     secure: true,
-    sameSite: 'strict',
+    sameSite: "strict",
     maxAge: 1000 * 60 * 60 * 24 * 7,
   });
   res.json({ user }); // 프론트엔드엔 사용자 정보 정도만 돌려준다
 });
 
 // 2) 현재 사용자 — 프론트가 로그인 여부를 알 수 있도록
-app.get('/auth/me', (req, res) => {
+app.get("/auth/me", (req, res) => {
   const session = sessions.get(req.cookies.sid);
-  if (!session) return res.status(401).json({ error: 'unauthenticated' });
+  if (!session) return res.status(401).json({ error: "unauthenticated" });
   res.json({ user: session.user });
 });
 
 // 3) 로그아웃
-app.post('/auth/logout', (req, res) => {
+app.post("/auth/logout", (req, res) => {
   sessions.delete(req.cookies.sid);
-  res.clearCookie('sid');
+  res.clearCookie("sid");
   res.status(204).end();
 });
 
 // 4) API 프록시 — 세션에서 토큰을 꺼내 실제 API로 붙여 전달
-app.use('/api', async (req, res) => {
+app.use("/api", async (req, res) => {
   const session = sessions.get(req.cookies.sid);
-  if (!session) return res.status(401).json({ error: 'unauthenticated' });
+  if (!session) return res.status(401).json({ error: "unauthenticated" });
 
   const upstream = await fetch(`${RESOURCE_API}${req.url}`, {
     method: req.method,
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       Authorization: `Bearer ${session.accessToken}`, // 토큰은 BFF에서 관리하여 요청 시 전달한다
     },
-    body: ['GET', 'HEAD'].includes(req.method) ? undefined : JSON.stringify(req.body),
+    body: ["GET", "HEAD"].includes(req.method) ? undefined : JSON.stringify(req.body),
   });
 
   // 로그인이 만료된 경우 (401) 이면 session.refreshToken으로 재발급 후 로그인 재시도하고,
@@ -917,16 +921,16 @@ app.listen(8080);
 async function apiFetch(path, options = {}) {
   return fetch(`/api${path}`, {
     ...options,
-    credentials: 'include',                 // 세션 쿠키(sid)만 자동 전송
-    headers: { 'Content-Type': 'application/json', ...options.headers },
+    credentials: "include", // 세션 쿠키(sid)만 자동 전송
+    headers: { "Content-Type": "application/json", ...options.headers },
   });
 }
 
 // 로그인도 BFF 엔드포인트만 호출
-await fetch('/auth/login', {
-  method: 'POST',
-  credentials: 'include', // BFF -> API 호출 시, 쿠키가 자동 전송되도록 여전히 필요
-  headers: { 'Content-Type': 'application/json' },
+await fetch("/auth/login", {
+  method: "POST",
+  credentials: "include", // BFF -> API 호출 시, 쿠키가 자동 전송되도록 여전히 필요
+  headers: { "Content-Type": "application/json" },
   body: JSON.stringify({ email, password }),
 });
 ```
