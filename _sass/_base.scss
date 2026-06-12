@@ -889,6 +889,9 @@ pre {
     border-radius: 0;
     margin-bottom: 0;
     padding: 0;
+    // Override inline `code { white-space: normal }` below
+    white-space: pre;
+    word-wrap: normal;
   }
 }
 
