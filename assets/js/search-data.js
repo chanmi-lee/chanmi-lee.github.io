@@ -16,7 +16,18 @@ ninja.data = [{
           handler: () => {
             window.location.href = "/blog/";
           },
-        },{id: "post-github-workflow-actions-으로-생산성-높이기",
+        },{id: "post-frontend-상태-관리-가이드",
+        
+          title: "Frontend 상태 관리 가이드",
+        
+        description: "",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/articles/2025-03/state-management-in-frontend/";
+          
+        },
+      },{id: "post-github-workflow-actions-으로-생산성-높이기",
         
           title: "GitHub Workflow Actions 으로 생산성 높이기",
         
